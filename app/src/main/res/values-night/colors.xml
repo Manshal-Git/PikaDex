@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="TintRed">#E94539</color>
+    <color name="ShadedTintRed">#C9372C</color>
+    <color name="PikaYellow">#E7C921</color>
+    <color name="PikaYellowShade">#DABE21</color>
+</resources>
