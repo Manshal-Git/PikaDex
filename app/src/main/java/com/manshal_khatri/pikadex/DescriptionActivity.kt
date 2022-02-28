@@ -4,12 +4,15 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View.GONE
 import android.view.View.VISIBLE
+import androidx.fragment.app.Fragment
 import com.manshal_khatri.pikadex.databinding.ActivityDescriptionBinding
 import com.manshal_khatri.pikadex.databinding.ActivityMainBinding
+import com.manshal_khatri.pikadex.fragments.FirstFragment
 
 class DescriptionActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityDescriptionBinding
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,6 +24,7 @@ class DescriptionActivity : AppCompatActivity() {
         val toolbar  = binding.collaspingToolbar
         val appbar  = binding.appBar
         appbar.verticalFadingEdgeLength
+        supportFragmentManager.beginTransaction().replace(R.id.desc_frag_container,FirstFragment()).commit()
 
 //        println("Working")
 //        println(toolbar.verticalFadingEdgeLength)

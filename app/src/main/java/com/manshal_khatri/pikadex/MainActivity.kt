@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-//        setSupportActionBar(binding.toolbar)
+//        setSupportActionBar(binding.toolbar) // gives an error/app crash on some android versions
         val pokemon = Pokemons(1,"pikachu","electric","water")
         pokemonsList.add(pokemon)
         pokemonsList.add(pokemon)
@@ -36,18 +36,6 @@ class MainActivity : AppCompatActivity() {
         binding.list.adapter = MyCardRecyclerViewAdapter(pokemonsList,this)
 
 
-
-//        binding.navigator.setOnClickListener {
-//            val intent = Intent(this@MainActivity,DescriptionActivity::class.java)
-//            startActivity(intent)
-//        }
-
-//        if (recyclerView is RecyclerView) {
-//            with(recyclerView) {
-//                layoutManager = LinearLayoutManager(context)
-//                adapter = RecyclerViewPostAdapter(fetchedPostList.filter { it.category == args.postCategory } as MutableList<PostDetails>,1)
-//            }
-//        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -55,20 +43,4 @@ class MainActivity : AppCompatActivity() {
         menuInflater.inflate(R.menu.menu_main, menu)
         return true
     }
-
-
-
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-
-
-
-
-
-//    override fun onSupportNavigateUp(): Boolean {
-//        val navController = findNavController(R.id.nav_host_fragment_content_main)
-//        return navController.navigateUp(appBarConfiguration)
-//                || super.onSupportNavigateUp()
-//    }
 }
