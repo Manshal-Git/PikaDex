@@ -6,6 +6,7 @@ import android.graphics.Typeface
 import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatTextView
 
+
 class PkmnNameTitle(context: Context,attrs : AttributeSet) : AppCompatTextView(context , attrs) {
     init {
         applyFont()

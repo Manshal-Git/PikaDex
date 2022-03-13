@@ -12,7 +12,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginVertical="4dp"
-        android:layout_marginHorizontal="8dp">
+        android:layout_marginHorizontal="8dp"
+       >
 
 
     <TextView
@@ -20,7 +21,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:text="Charmender"
+        android:text="charmender"
         android:textStyle="bold"
         android:textSize="24sp"/>
 
@@ -30,36 +31,44 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/pokeName"
-            android:layout_margin="8dp"
-            android:layout_marginStart="@dimen/text_margin"
-            android:layout_marginTop="@dimen/text_margin"
-            android:layout_marginEnd="@dimen/text_margin"
-            android:layout_marginBottom="@dimen/text_margin"
-            android:background="@drawable/type_bg"
-            android:textColor="@color/white"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/type_bg_fire"
+            android:gravity="center"
             android:paddingHorizontal="16dp"
             android:text="Fire"
+            android:textColor="@color/white"
             android:textSize="18sp" />
 
         <TextView
             android:id="@+id/poketype2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:layout_below="@+id/pokeName"
-            android:textColor="@color/white"
-            android:layout_margin="8dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
             android:layout_toRightOf="@+id/poketype1"
-            android:background="@drawable/type_bg"
+            android:background="@drawable/type_bg_fire"
             android:paddingHorizontal="16dp"
-            android:text="flying"
-            android:textSize="18sp" />
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:visibility="gone"/>
 
-    <ImageView
-        android:layout_alignParentEnd="true"
-        android:layout_margin="4dp"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:src="@drawable/charmender"/>
+        <ImageView
+            android:id="@+id/PokeSprite"
+            android:layout_width="96dp"
+            android:layout_height="96dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="4dp"
+            android:layout_marginBottom="4dp"
+             />
 
     </RelativeLayout>
 </LinearLayout>

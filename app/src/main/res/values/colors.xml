@@ -12,5 +12,14 @@
     <color name="PikaYellow">#f6cf57</color>
     <color name="PikaYellowShade">#DABE21</color>
 
+    <color name="TintGreen">#16d836</color>
+    <color name="TintMaroon">#aa1da0</color>
+    <color name="TintSky">#11bacc</color>
+    <color name="SmoothWhite">#f1eff1</color>
+    <color name="TintCream">#fff8bb</color>
+    <color name="TintYellow">#fcec5e</color>
+    <color name="ShadedMaroon">#723371</color>
+    <color name="ShadedYellow">#d8ce4e</color>
+
 
 </resources>

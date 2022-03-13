@@ -4,14 +4,33 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/AAA/AndroidStudioProjects/PikaDex/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.3388888888888889" />
+        <entry key="..\:/Users/AAA/AndroidStudioProjects/PikaDex/app/src/main/res/drawable/electric_wp.xml" value="0.1495" />
+        <entry key="..\:/Users/AAA/AndroidStudioProjects/PikaDex/app/src/main/res/drawable/fire_wp.xml" value="0.172" />
+        <entry key="..\:/Users/AAA/AndroidStudioProjects/PikaDex/app/src/main/res/drawable/flying_wp.xml" value="0.1495" />
+        <entry key="..\:/Users/AAA/AndroidStudioProjects/PikaDex/app/src/main/res/drawable/ghost_wp.xml" value="0.1495" />
+        <entry key="..\:/Users/AAA/AndroidStudioProjects/PikaDex/app/src/main/res/drawable/grass_wp.xml" value="0.1" />
         <entry key="..\:/Users/AAA/AndroidStudioProjects/PikaDex/app/src/main/res/drawable/ic_launcher_background.xml" value="0.3388888888888889" />
-        <entry key="..\:/Users/AAA/AndroidStudioProjects/PikaDex/app/src/main/res/drawable/stats_bar_bg.xml" value="0.35625" />
+        <entry key="..\:/Users/AAA/AndroidStudioProjects/PikaDex/app/src/main/res/drawable/normal_wp.xml" value="0.1495" />
+        <entry key="..\:/Users/AAA/AndroidStudioProjects/PikaDex/app/src/main/res/drawable/posion_wp.xml" value="0.1495" />
+        <entry key="..\:/Users/AAA/AndroidStudioProjects/PikaDex/app/src/main/res/drawable/psychic_wp.xml" value="0.1495" />
+        <entry key="..\:/Users/AAA/AndroidStudioProjects/PikaDex/app/src/main/res/drawable/stats_bar_bg.xml" value="0.2" />
         <entry key="..\:/Users/AAA/AndroidStudioProjects/PikaDex/app/src/main/res/drawable/type_bg.xml" value="0.35625" />
+        <entry key="..\:/Users/AAA/AndroidStudioProjects/PikaDex/app/src/main/res/drawable/type_bg_electric.xml" value="0.1205" />
+        <entry key="..\:/Users/AAA/AndroidStudioProjects/PikaDex/app/src/main/res/drawable/type_bg_fire.xml" value="0.1205" />
+        <entry key="..\:/Users/AAA/AndroidStudioProjects/PikaDex/app/src/main/res/drawable/type_bg_flying.xml" value="0.1205" />
+        <entry key="..\:/Users/AAA/AndroidStudioProjects/PikaDex/app/src/main/res/drawable/type_bg_ghost.xml" value="0.1205" />
+        <entry key="..\:/Users/AAA/AndroidStudioProjects/PikaDex/app/src/main/res/drawable/type_bg_grass.xml" value="0.1565" />
+        <entry key="..\:/Users/AAA/AndroidStudioProjects/PikaDex/app/src/main/res/drawable/type_bg_normal.xml" value="0.1205" />
+        <entry key="..\:/Users/AAA/AndroidStudioProjects/PikaDex/app/src/main/res/drawable/type_bg_poison.xml" value="0.1565" />
+        <entry key="..\:/Users/AAA/AndroidStudioProjects/PikaDex/app/src/main/res/drawable/type_bg_psychic.xml" value="0.1205" />
+        <entry key="..\:/Users/AAA/AndroidStudioProjects/PikaDex/app/src/main/res/drawable/type_bg_water.xml" value="0.1205" />
+        <entry key="..\:/Users/AAA/AndroidStudioProjects/PikaDex/app/src/main/res/drawable/water_wp.xml" value="0.172" />
         <entry key="..\:/Users/AAA/AndroidStudioProjects/PikaDex/app/src/main/res/layout/activity_description.xml" value="0.3359375" />
         <entry key="..\:/Users/AAA/AndroidStudioProjects/PikaDex/app/src/main/res/layout/activity_main.xml" value="0.25" />
         <entry key="..\:/Users/AAA/AndroidStudioProjects/PikaDex/app/src/main/res/layout/content_main.xml" value="0.33177083333333335" />
-        <entry key="..\:/Users/AAA/AndroidStudioProjects/PikaDex/app/src/main/res/layout/fragment_card.xml" value="0.3359375" />
+        <entry key="..\:/Users/AAA/AndroidStudioProjects/PikaDex/app/src/main/res/layout/fragment_card.xml" value="0.25" />
         <entry key="..\:/Users/AAA/AndroidStudioProjects/PikaDex/app/src/main/res/layout/fragment_card_list.xml" value="0.3145833333333333" />
+        <entry key="..\:/Users/AAA/AndroidStudioProjects/PikaDex/app/src/main/res/layout/fragment_dashboard.xml" value="0.2986111111111111" />
         <entry key="..\:/Users/AAA/AndroidStudioProjects/PikaDex/app/src/main/res/layout/fragment_first.xml" value="0.33" />
         <entry key="..\:/Users/AAA/AndroidStudioProjects/PikaDex/app/src/main/res/layout/fragment_second.xml" value="0.33177083333333335" />
         <entry key="..\:/Users/AAA/AndroidStudioProjects/PikaDex/app/src/main/res/menu/menu_main.xml" value="0.33177083333333335" />
