@@ -7,7 +7,9 @@
     android:layout_height="match_parent"
     tools:context=".DescriptionActivity">
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
+
+
+   <!-- <androidx.coordinatorlayout.widget.CoordinatorLayout
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -32,16 +34,14 @@
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             >
 
-            <androidx.constraintlayout.motion.widget.MotionLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/relativeLayout2"
                 android:layout_width="match_parent"
                 android:layout_height="250dp"
                 android:background="@drawable/wallpaperflare_cropped"
                 android:backgroundTint="@color/black"
                 android:backgroundTintMode="screen"
-                app:layoutDescription="@xml/activity_description_xml_relativelayout2_scene"
-                app:layout_constraintTop_toTopOf="parent">
-
+                >
 
                 <TextView
                     android:id="@+id/pokeName"
@@ -112,7 +112,8 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/type2" />
 
-            </androidx.constraintlayout.motion.widget.MotionLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
             <TextView
@@ -148,12 +149,12 @@
 
                 app:menu="@menu/menu_main">
 
-               <!-- <androidx.fragment.app.FragmentContainerView
+               &lt;!&ndash; <androidx.fragment.app.FragmentContainerView
                     android:id="@+id/desc_frag_container"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginTop="56dp"
-                    />-->
+                    />&ndash;&gt;
 
             </com.google.android.material.bottomnavigation.BottomNavigationView>
 
@@ -178,7 +179,101 @@
 
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
+-->
+    <TextView
+        android:id="@+id/pokeName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:fontFamily="sans-serif-medium"
+        android:paddingStart="8dp"
+        android:text="Charmender"
+        android:textColor="@color/black"
+        android:textSize="26sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@id/PokeSprite"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 
+    <TextView
+        android:id="@+id/type1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+
+        android:layout_marginStart="12dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginTop="96dp"
+        android:layout_marginEnd="85dp"
+        android:layout_marginRight="85dp"
+        android:layout_marginBottom="96dp"
+        android:background="@drawable/type_bg_fire"
+        android:paddingHorizontal="16dp"
+        android:text="Fire"
+        android:textColor="@color/white"
+        android:textSize="24sp"
+
+
+        app:layout_constraintEnd_toStartOf="@+id/PokeSprite"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/PokeSprite" />
+
+    <TextView
+        android:id="@+id/type2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginTop="14dp"
+        android:layout_marginEnd="85dp"
+        android:layout_marginRight="85dp"
+        android:background="@drawable/type_bg_fire"
+        android:paddingHorizontal="16dp"
+        android:text="Fire"
+        android:textColor="@color/white"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toStartOf="@+id/PokeSprite"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/type1" />
+
+
+    <ImageView
+        android:id="@+id/PokeSprite"
+        android:layout_width="0dp"
+        android:layout_height="220dp"
+        android:layout_marginTop="80dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginRight="4dp"
+        android:layout_marginBottom="4dp"
+        android:src="@drawable/charmender"
+        app:layout_constraintTop_toTopOf="parent"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/type2" />
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigationView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:elevation="0dp"
+        android:outlineAmbientShadowColor="@color/white"
+
+        android:outlineSpotShadowColor="@color/white"
+        app:layout_constraintTop_toBottomOf="@+id/PokeSprite"
+        app:menu="@menu/menu_main" />
+
+    <ScrollView
+        android:layout_marginTop="360dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintTop_toBottomOf="@+id/bottomNavigationView">
+
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/desc_frag_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+             />
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
