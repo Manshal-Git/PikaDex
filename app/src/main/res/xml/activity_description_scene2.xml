@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:motion="http://schemas.android.com/apk/res-auto">
+
+    <Transition
+        motion:constraintSetEnd="@+id/end"
+        motion:constraintSetStart="@id/start"
+        motion:duration="1000">
+       <KeyFrameSet>
+       </KeyFrameSet>
+        <OnSwipe motion:touchAnchorId="@id/pokeName" />
+        <OnSwipe
+            motion:touchAnchorId="@+id/bottomNavigationView"
+            motion:touchAnchorSide="bottom" />
+
+
+    </Transition>
+
+    <ConstraintSet android:id="@+id/start">
+        <Constraint
+            android:layout_marginEnd="85dp"
+            android:layout_height="wrap_content"
+            motion:layout_constraintEnd_toStartOf="@+id/PokeSprite"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintBottom_toTopOf="@+id/pokeName"
+            android:layout_marginBottom="16dp"
+            android:layout_width="wrap_content"
+            android:layout_marginStart="12dp"
+            android:id="@+id/type2" />
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/end">
+        <Constraint
+            motion:layout_constraintEnd_toEndOf="@id/PokeSprite"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            motion:layout_constraintStart_toStartOf="parent"
+            android:id="@+id/pokeName"
+            motion:layout_constraintTop_toTopOf="parent"
+            android:scaleY="1.25"
+            android:scaleX="1.2"
+            android:translationX="40dp"
+            android:translationY="20dp"
+            motion:transitionEasing="linear"
+            motion:pathMotionArc="flip" />
+        <Constraint
+            android:id="@+id/PokeSprite"
+            motion:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="110dp"
+            android:layout_height="120dp"
+            android:layout_marginBottom="4dp"
+            android:layout_marginEnd="4dp"
+            motion:layout_constraintTop_toTopOf="parent"
+            android:layout_marginRight="4dp"
+            android:layout_marginTop="8dp" />
+        <Constraint
+            android:id="@+id/type1"
+            motion:layout_constraintEnd_toStartOf="@+id/PokeSprite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="85dp"
+            android:layout_marginStart="8dp"
+            motion:layout_constraintTop_toTopOf="@+id/PokeSprite"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="85dp"
+            motion:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="72dp"
+            motion:layout_constraintHorizontal_bias="0.036" />
+        <Constraint
+            android:id="@+id/type2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="85dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="85dp"
+            motion:layout_constraintStart_toEndOf="@id/type1"
+            motion:layout_constraintTop_toTopOf="@id/PokeSprite"
+
+            android:layout_marginTop="72dp"
+            android:visibility="visible"
+            motion:pathMotionArc="startVertical"
+            motion:transitionEasing="linear" />
+        <Constraint
+            android:id="@+id/scrollView2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            motion:layout_constraintTop_toBottomOf="@+id/bottomNavigationView"
+            android:layout_marginTop="185dp" />
+        <Constraint
+            android:id="@+id/desc_frag_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="185dp" />
+    </ConstraintSet>
+</MotionScene>

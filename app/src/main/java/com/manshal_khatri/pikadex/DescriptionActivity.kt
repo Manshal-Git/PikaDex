@@ -13,6 +13,7 @@ import android.view.WindowManager
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.annotation.RequiresApi
+import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.core.view.marginBottom
 import androidx.core.view.marginTop
 import androidx.fragment.app.Fragment
@@ -34,9 +35,9 @@ class DescriptionActivity : AppCompatActivity() {
 //        val actionBar = actionBar
         binding = ActivityDescriptionBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        val toolbar  = binding.collaspingToolbar
-        val appbar  = binding.appBar
-        appbar.verticalFadingEdgeLength
+//        val toolbar  = binding.collaspingToolbar
+//        val appbar  = binding.appBar
+//        appbar.verticalFadingEdgeLength
         if (intent!=null){
             val pokemon = pokemonsList.find { intent.getIntExtra("id" , 1) == it.id  }
             if (pokemon != null) {
@@ -90,7 +91,7 @@ class DescriptionActivity : AppCompatActivity() {
         }
     }
     @RequiresApi(Build.VERSION_CODES.M)
-    fun setTypeBG(type: String, holder: RelativeLayout){
+    fun setTypeBG(type: String, holder: MotionLayout){
         when(type){
             "grass" -> holder.setBackgroundResource(R.drawable.grass_wp)
             "poison" -> holder.setBackgroundResource(R.drawable.posion_wp)
