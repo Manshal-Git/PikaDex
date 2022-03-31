@@ -16,12 +16,7 @@ import com.manshal_khatri.pikadex.fragments.placeholder.PlaceholderContent.Place
 import com.manshal_khatri.pikadex.model.Pokemons
 import com.squareup.picasso.Picasso
 
-//import com.manshal_khatri.pikadex.fragments.databinding.FragmentCardBinding
 
-/**
- * [RecyclerView.Adapter] that can display a [PlaceholderItem].
- * TODO: Replace the implementation with code for your data type.
- */
 class MyCardRecyclerViewAdapter(
      val values: List<Pokemons> , view : View
 ) : RecyclerView.Adapter<MyCardRecyclerViewAdapter.ViewHolder>() {
@@ -42,21 +37,20 @@ class MyCardRecyclerViewAdapter(
 
         val item = values[position]
         holder.pokecard.setOnClickListener {
-//            Navigation.findNavController(it).navigate(R.id.firstFragment)
             val intent = Intent(it.context,DescriptionActivity::class.java)
             intent.putExtra("id",item.id)
             it.context.startActivity(intent)
         }
         holder.pokeName.text =  item.pokeName
         holder.pokeType1.text = item.pokeType.type1
-        item.pokeType.type1?.let { setTypecolor(it,holder.pokeType1) }
-//        println(item.pokeType.type1 + " " + item.pokeType.type2)
-        if(item.pokeType.type2!=null){
+        setTypecolor(item.pokeType.type1,holder.pokeType1)
+
+        if(item.pokeType.type2 != null){
             holder.pokeType2.text = item.pokeType.type2
             setTypecolor(item.pokeType.type2,holder.pokeType2)
             holder.pokeType2.visibility = VISIBLE
         }
-//      Picasso.get().load(item.spriteUrl).into(holder.pokeSprite)
+
         Picasso.get().load(item.spriteUrl).into(holder.pokeSprite)
     }
 
@@ -80,10 +74,12 @@ class MyCardRecyclerViewAdapter(
             "water" -> holder.setBackgroundResource(R.drawable.type_bg_water)
             "electric" -> holder.setBackgroundResource(R.drawable.type_bg_electric)
             "psychic" -> holder.setBackgroundResource(R.drawable.type_bg_psychic)
-            "flying"-> {holder.setBackgroundResource(R.drawable.type_bg_flying)
-                        holder.setTextColor(R.color.black)}
             "ghost"-> holder.setBackgroundResource(R.drawable.type_bg_ghost)
-            "normal"-> holder.setBackgroundResource(R.drawable.type_bg_normal)
+
+            "flying"-> {holder.setBackgroundResource(R.drawable.type_bg_flying)
+                holder.setTextColor(R.color.black)}
+            "normal"-> { holder.setBackgroundResource(R.drawable.type_bg_normal)
+                        holder.setTextColor(R.color.black)}
         }
     }
 

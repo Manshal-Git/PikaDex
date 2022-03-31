@@ -28,6 +28,7 @@ class DescriptionActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDescriptionBinding
 
 
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_description)
@@ -48,31 +49,20 @@ class DescriptionActivity : AppCompatActivity() {
                     binding.type2.text = pokemon.pokeType.type2
                     binding.type1.text = pokemon.pokeType.type1
                     setTypecolor(pokemon.pokeType.type2,binding.type2)
-                    pokemon.pokeType.type1?.let { setTypecolor(it,binding.type1) }
+                    pokemon.pokeType.type1?.let { setTypecolor(it,binding.type1)
+                                                  setTypeBG(it,binding.relativeLayout2)}
 
                 }else{
                     binding.type1.visibility= GONE
                     binding.type2.text = pokemon.pokeType.type1
                     pokemon.pokeType.type1?.let { setTypecolor(it,binding.type2) }
                 }
-                pokemon.pokeType.type1?.let { setTypeBG(it,binding.relativeLayout2) }
+//                pokemon.pokeType.type1?.let {  }
 
             }
         }
 
         supportFragmentManager.beginTransaction().replace(R.id.desc_frag_container,FirstFragment()).commit()
-
-//        println("Working")
-//        println(toolbar.verticalFadingEdgeLength)
-//        if(toolbar.isHorizontalFadingEdgeEnabled) {
-//            if (toolbar.verticalFadingEdgeLength < 56) {
-//                binding.pokeName.visibility = GONE
-//                println(toolbar.verticalFadingEdgeLength)
-//            } else {
-//                binding.pokeName.visibility = VISIBLE
-//                println(toolbar.verticalFadingEdgeLength)
-//            }
-//        }
 
     }
     @SuppressLint("ResourceAsColor")
@@ -105,10 +95,10 @@ class DescriptionActivity : AppCompatActivity() {
         }
 
     }
-    fun setStatusbar(){
+    /*fun setStatusbar(){
             val window = this.window
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
         window.statusBarColor=this.resources.getColor(R.color.TintSky)
-    }
+    }*/
 }
