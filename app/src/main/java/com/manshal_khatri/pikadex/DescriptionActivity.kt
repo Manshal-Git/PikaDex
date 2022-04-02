@@ -22,6 +22,8 @@ import com.manshal_khatri.pikadex.fragments.MovesFragment
 import com.manshal_khatri.pikadex.model.Moves
 import com.manshal_khatri.pikadex.model.Pokemons
 import com.squareup.picasso.Picasso
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class DescriptionActivity : AppCompatActivity() {
 
@@ -41,6 +43,11 @@ class DescriptionActivity : AppCompatActivity() {
 //        appbar.verticalFadingEdgeLength
         val pokeId = intent.getIntExtra("id" , 1)
         val queue = Volley.newRequestQueue(this)
+        val queuem = Volley.newRequestQueue(this)
+        GlobalScope.launch {
+
+
+        }
         val request = object : JsonObjectRequest(Method.GET, pokeApi+"$pokeId",null,Response.Listener {
             print("Api Response success $it")
                 // Getting moves
@@ -48,6 +55,14 @@ class DescriptionActivity : AppCompatActivity() {
             for( i in 0 until moveslist.length()){
                 val move = moveslist.getJSONObject(i)
                println(move.getJSONObject("move").getString("name"))
+                val lateVer = move.getJSONArray("version_group_details")
+                if(lateVer.getJSONObject(lateVer.length()-1).getJSONObject("move_learn_method").getString("name")=="level-up"){
+                    Moves(
+                        lateVer.getJSONObject(lateVer.length()-1).getInt("level_learned_at"),
+                        move.getJSONObject("move").getString("name"),
+
+                    )
+                }
             }
 
         },Response.ErrorListener {
