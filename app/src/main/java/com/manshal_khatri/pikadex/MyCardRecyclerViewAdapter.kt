@@ -7,6 +7,7 @@ import android.content.Intent
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.LinearLayout
@@ -44,12 +45,14 @@ class MyCardRecyclerViewAdapter(
         holder.pokeName.text =  item.pokeName
         holder.pokeType1.text = item.pokeType.type1
         setTypecolor(item.pokeType.type1,holder.pokeType1)
-
-        if(item.pokeType.type2 != null){
+        if(item.pokeType.type2!=""){
             holder.pokeType2.text = item.pokeType.type2
             setTypecolor(item.pokeType.type2,holder.pokeType2)
             holder.pokeType2.visibility = VISIBLE
+        }else{
+            holder.pokeType2.visibility = GONE
         }
+
 
         Picasso.get().load(item.spriteUrl).into(holder.pokeSprite)
     }

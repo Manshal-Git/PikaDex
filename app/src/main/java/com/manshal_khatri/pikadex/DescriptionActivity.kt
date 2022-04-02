@@ -7,26 +7,26 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View.GONE
-import android.view.View.VISIBLE
-import android.view.Window
-import android.view.WindowManager
-import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.constraintlayout.motion.widget.MotionLayout
-import androidx.core.view.marginBottom
-import androidx.core.view.marginTop
-import androidx.fragment.app.Fragment
+import com.android.volley.Request
+import com.android.volley.Response
+import com.android.volley.toolbox.JsonObjectRequest
+import com.android.volley.toolbox.Volley
 import com.manshal_khatri.pikadex.databinding.ActivityDescriptionBinding
 import com.manshal_khatri.pikadex.databinding.ActivityMainBinding
 import com.manshal_khatri.pikadex.fragments.FirstFragment
+import com.manshal_khatri.pikadex.fragments.LocationFragment
+import com.manshal_khatri.pikadex.fragments.MovesFragment
+import com.manshal_khatri.pikadex.model.Moves
 import com.manshal_khatri.pikadex.model.Pokemons
 import com.squareup.picasso.Picasso
 
 class DescriptionActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityDescriptionBinding
-
+    val pokeMoves = mutableListOf<Moves>()
 
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,30 +39,68 @@ class DescriptionActivity : AppCompatActivity() {
 //        val toolbar  = binding.collaspingToolbar
 //        val appbar  = binding.appBar
 //        appbar.verticalFadingEdgeLength
+        val pokeId = intent.getIntExtra("id" , 1)
+        val queue = Volley.newRequestQueue(this)
+        val request = object : JsonObjectRequest(Method.GET, pokeApi+"$pokeId",null,Response.Listener {
+            print("Api Response success $it")
+                // Getting moves
+            val moveslist = it.getJSONArray("moves")
+            for( i in 0 until moveslist.length()){
+                val move = moveslist.getJSONObject(i)
+               println(move.getJSONObject("move").getString("name"))
+            }
+
+        },Response.ErrorListener {
+
+        }){
+
+        }
+        queue.add(request)
+
+
         if (intent!=null){
-            val pokemon = pokemonsList.find { intent.getIntExtra("id" , 1) == it.id  }
+            val pokemon = pokemonsList.find {  pokeId == it.id  }
             if (pokemon != null) {
                 binding.pokeName.text = pokemon.pokeName
                 Picasso.get().load(pokemon.spriteUrl).into(binding.PokeSprite)
 
-                if(pokemon.pokeType.type2!=null){
+                if(pokemon.pokeType.type2!=""){
                     binding.type2.text = pokemon.pokeType.type2
                     binding.type1.text = pokemon.pokeType.type1
                     setTypecolor(pokemon.pokeType.type2,binding.type2)
-                    pokemon.pokeType.type1?.let { setTypecolor(it,binding.type1)
-                                                  setTypeBG(it,binding.relativeLayout2)}
+                    pokemon.pokeType.type1.let { setTypecolor(it,binding.type1)
+                        setTypeBG(it,binding.relativeLayout2)}
 
                 }else{
                     binding.type1.visibility= GONE
                     binding.type2.text = pokemon.pokeType.type1
-                    pokemon.pokeType.type1?.let { setTypecolor(it,binding.type2) }
+                    pokemon.pokeType.type1.let { setTypecolor(it,binding.type2)
+                        setTypeBG(it,binding.relativeLayout2)}
                 }
-//                pokemon.pokeType.type1?.let {  }
+
+
 
             }
         }
 
-        supportFragmentManager.beginTransaction().replace(R.id.desc_frag_container,FirstFragment()).commit()
+        binding.bottomNavigationView.setOnNavigationItemSelectedListener {
+            when(it.itemId){
+                R.id.action_moves -> {
+                    supportFragmentManager.beginTransaction().replace(R.id.desc_frag_container,MovesFragment()).commit()
+                    return@setOnNavigationItemSelectedListener  true
+                }
+                R.id.action_stats -> {
+                    supportFragmentManager.beginTransaction().replace(R.id.desc_frag_container,FirstFragment()).commit()
+                    return@setOnNavigationItemSelectedListener  true
+                }
+                else -> {
+                    supportFragmentManager.beginTransaction().replace(R.id.desc_frag_container,LocationFragment()).commit()
+                    return@setOnNavigationItemSelectedListener  true
+                }
+            }
+        }
+        supportFragmentManager.beginTransaction().add(R.id.desc_frag_container,FirstFragment()).commit()
+
 
     }
     @SuppressLint("ResourceAsColor")

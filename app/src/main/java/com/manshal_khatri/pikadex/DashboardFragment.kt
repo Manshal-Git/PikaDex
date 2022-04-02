@@ -18,7 +18,7 @@ import com.manshal_khatri.pikadex.model.Types
 
 class DashboardFragment : Fragment() {
     lateinit var list : RecyclerView
-
+    var dataloaded = false
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -30,49 +30,62 @@ class DashboardFragment : Fragment() {
 
         val queue = Volley.newRequestQueue(activity as Context)
 
-        for(i in start until limit){
+        if(!dataloaded) {
+            for (i in start until limit) {
 
-            val reqPkms = object : JsonObjectRequest(Request.Method.GET, pokeApi+"$i",null,Response.Listener {
+                val reqPkms = object :
+                    JsonObjectRequest(Request.Method.GET, pokeApi + "$i", null, Response.Listener {
 
-                println("Category API success ${it.getInt("id")}")
-                val pokeObj = it
-                if(pokeObj.getJSONArray("types").length() == 2) {   // IF POKEMON HAS 2 TYPES
+                        println("Category API success ${it.getInt("id")}")
+                        val pokeObj = it
+                        if (pokeObj.getJSONArray("types")
+                                .length() == 2
+                        ) {   // IF POKEMON HAS 2 TYPES
 
-                    pokemonsList.add(
-                        Pokemons(
-                            pokeObj.getInt("id")
-                            , pokeObj.getString("name")+pokeObj.getInt("id").toString()
-                            , Types(
-                                pokeObj.getJSONArray("types").getJSONObject(0)
-                                    .getJSONObject("type")
-                                    .getString("name"),
-                                pokeObj.getJSONArray("types").getJSONObject(1)
-                                    .getJSONObject("type")
-                                    .getString("name")
+                            pokemonsList.add(
+                                Pokemons(
+                                    pokeObj.getInt("id"),
+                                    pokeObj.getString("name") + pokeObj.getInt("id").toString(),
+                                    Types(
+                                        pokeObj.getJSONArray("types").getJSONObject(0)
+                                            .getJSONObject("type")
+                                            .getString("name"),
+                                        pokeObj.getJSONArray("types").getJSONObject(1)
+                                            .getJSONObject("type")
+                                            .getString("name")
+                                    ),
+                                    pokeObj.getJSONObject("sprites").getJSONObject("other")
+                                        .getJSONObject("home").getString("front_default")
+                                )
                             )
-                            ,pokeObj.getJSONObject("sprites").getJSONObject("other").getJSONObject("home").getString("front_default")
-                        )
-                    )
-                }else{
-                    pokemonsList.add(
-                        Pokemons(
-                            pokeObj.getInt("id"),
-                            pokeObj.getString("name")
-                            , Types(
-                                pokeObj.getJSONArray("types").getJSONObject(0)
-                                    .getJSONObject("type")
-                                    .getString("name"),null
-                            ),pokeObj.getJSONObject("sprites").getJSONObject("other").getJSONObject("home").getString("front_default")
-                        )
-                    )
-                }
-//                    start++                       //THIS HAVE TO BE CHECKED
-            }, Response.ErrorListener {
-                Toast.makeText(activity as Context ,"Something got wrong" , Toast.LENGTH_SHORT).show()
-            }){
+                        } else {
+                            pokemonsList.add(
+                                Pokemons(
+                                    pokeObj.getInt("id"),
+                                    pokeObj.getString("name"),
+                                    Types(
+                                        pokeObj.getJSONArray("types").getJSONObject(0)
+                                            .getJSONObject("type")
+                                            .getString("name"), ""
+                                    ),
+                                    pokeObj.getJSONObject("sprites").getJSONObject("other")
+                                        .getJSONObject("home").getString("front_default")
+                                )
+                            )
+                        }
 
+                    }, Response.ErrorListener {
+                        Toast.makeText(
+                            activity as Context,
+                            "Something got wrong",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }) {
+
+                }
+                queue.add(reqPkms)
             }
-            queue.add(reqPkms)
+            dataloaded=true
         }
 
         list.layoutManager = LinearLayoutManager(context)
