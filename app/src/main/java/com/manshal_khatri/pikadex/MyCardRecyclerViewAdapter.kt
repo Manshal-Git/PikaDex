@@ -68,6 +68,7 @@ class MyCardRecyclerViewAdapter(
         val pokeSprite = binding.PokeSprite
 
     }
+
     @SuppressLint("ResourceAsColor")
     fun setTypecolor(type:String , holder : TextView){
         when(type){
@@ -85,6 +86,5 @@ class MyCardRecyclerViewAdapter(
                         holder.setTextColor(R.color.black)}
         }
     }
-
 
 }

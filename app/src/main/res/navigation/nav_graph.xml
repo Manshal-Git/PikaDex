@@ -7,9 +7,9 @@
 
     <fragment
         android:id="@+id/FirstFragment"
-        android:name="com.manshal_khatri.pikadex.fragments.FirstFragment"
+        android:name="com.manshal_khatri.pikadex.fragments.StatsFragment"
         android:label="@string/first_fragment_label"
-        tools:layout="@layout/fragment_first">
+        tools:layout="@layout/fragment_stats">
 
         <action
             android:id="@+id/action_FirstFragment_to_SecondFragment"

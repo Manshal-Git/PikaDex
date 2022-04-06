@@ -10,13 +10,17 @@ import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.manshal_khatri.pikadex.databinding.ActivityMainBinding
+import com.manshal_khatri.pikadex.model.MoveData
+import com.manshal_khatri.pikadex.model.Moves
 import com.manshal_khatri.pikadex.model.Pokemons
 import org.json.JSONObject
 
 val pokeApi =  "https://pokeapi.co/api/v2/pokemon/"
 val pokemonsList = mutableListOf<Pokemons>()
+val pokeMoves = mutableListOf<Moves>()
+var pokeMoveData = mutableListOf<MoveData>()
 var start = 1
-var limit = 50
+var limit = (5..15).random()
 
 class MainActivity : AppCompatActivity() {
 
@@ -32,7 +36,9 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         supportFragmentManager.beginTransaction().replace(R.id.pokeList_container, DashboardFragment()).commit()
-
+        binding.button.setOnClickListener {
+           supportFragmentManager.beginTransaction().replace(R.id.pokeList_container, DashboardFragment()).commit()
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

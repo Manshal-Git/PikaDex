@@ -13,11 +13,13 @@ import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.manshal_khatri.pikadex.model.Pokemons
 import com.manshal_khatri.pikadex.model.Types
 
 class DashboardFragment : Fragment() {
     lateinit var list : RecyclerView
+
     var dataloaded = false
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -28,9 +30,9 @@ class DashboardFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_dashboard, container, false)
         list = view.findViewById(R.id.list)
 
-        val queue = Volley.newRequestQueue(activity as Context)
 
-        if(!dataloaded) {
+        val queue = Volley.newRequestQueue(activity as Context)
+        if(pokemonsList.isEmpty()) {
             for (i in start until limit) {
 
                 val reqPkms = object :
@@ -85,7 +87,6 @@ class DashboardFragment : Fragment() {
                 }
                 queue.add(reqPkms)
             }
-            dataloaded=true
         }
 
         list.layoutManager = LinearLayoutManager(context)

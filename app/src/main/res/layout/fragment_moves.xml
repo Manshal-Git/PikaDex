@@ -5,19 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragments.MovesFragment"
-    android:background="@drawable/fire_wp">
+    android:background="@color/white">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
 
-    <Switch
-        android:id="@+id/switch1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="Switch" />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/moveListRV"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
 </RelativeLayout>
