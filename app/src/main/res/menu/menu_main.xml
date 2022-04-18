@@ -16,6 +16,7 @@ android:icon="@drawable/ic_moves"
 
     <item
         android:id="@+id/action_map"
+
 android:icon="@drawable/ic_location"
         android:iconTint="@color/PikaYellowShade"
         android:title="Map"

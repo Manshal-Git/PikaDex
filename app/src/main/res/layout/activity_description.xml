@@ -3,11 +3,11 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/relativeLayout2"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layoutDescription="@xml/activity_description_scene2"
-    tools:context=".DescriptionActivity"
-    android:id="@+id/relativeLayout2">
+    tools:context=".DescriptionActivity">
 
         <ImageView
             android:id="@+id/imageView"
@@ -82,8 +82,6 @@
             app:layout_constraintTop_toTopOf="parent" />
 
 
-
-
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottomNavigationView"
             android:layout_width="match_parent"
@@ -94,15 +92,14 @@
             app:menu="@menu/menu_main" />
 
 
-
-    <androidx.fragment.app.FragmentContainerView
-        android:background="@color/white"
-        android:id="@+id/desc_frag_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/bottomNavigationView"
-        />
-
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/desc_frag_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            app:layout_constraintTop_toBottomOf="@id/bottomNavigationView"
+            android:clickable="false"
+            />
 
 
 

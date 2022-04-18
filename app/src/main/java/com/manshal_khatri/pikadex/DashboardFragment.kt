@@ -16,6 +16,8 @@ import com.android.volley.toolbox.Volley
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.manshal_khatri.pikadex.model.Pokemons
 import com.manshal_khatri.pikadex.model.Types
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class DashboardFragment : Fragment() {
     lateinit var list : RecyclerView
@@ -28,71 +30,14 @@ class DashboardFragment : Fragment() {
         // Inflate the layout for this fragment
 
         val view = inflater.inflate(R.layout.fragment_dashboard, container, false)
-        list = view.findViewById(R.id.list)
-
-
-        val queue = Volley.newRequestQueue(activity as Context)
-        if(pokemonsList.isEmpty()) {
-            for (i in start until limit) {
-
-                val reqPkms = object :
-                    JsonObjectRequest(Request.Method.GET, pokeApi + "$i", null, Response.Listener {
-
-                        println("Category API success ${it.getInt("id")}")
-                        val pokeObj = it
-                        if (pokeObj.getJSONArray("types")
-                                .length() == 2
-                        ) {   // IF POKEMON HAS 2 TYPES
-
-                            pokemonsList.add(
-                                Pokemons(
-                                    pokeObj.getInt("id"),
-                                    pokeObj.getString("name") + pokeObj.getInt("id").toString(),
-                                    Types(
-                                        pokeObj.getJSONArray("types").getJSONObject(0)
-                                            .getJSONObject("type")
-                                            .getString("name"),
-                                        pokeObj.getJSONArray("types").getJSONObject(1)
-                                            .getJSONObject("type")
-                                            .getString("name")
-                                    ),
-                                    pokeObj.getJSONObject("sprites").getJSONObject("other")
-                                        .getJSONObject("home").getString("front_default")
-                                )
-                            )
-                        } else {
-                            pokemonsList.add(
-                                Pokemons(
-                                    pokeObj.getInt("id"),
-                                    pokeObj.getString("name"),
-                                    Types(
-                                        pokeObj.getJSONArray("types").getJSONObject(0)
-                                            .getJSONObject("type")
-                                            .getString("name"), ""
-                                    ),
-                                    pokeObj.getJSONObject("sprites").getJSONObject("other")
-                                        .getJSONObject("home").getString("front_default")
-                                )
-                            )
-                        }
-
-                    }, Response.ErrorListener {
-                        Toast.makeText(
-                            activity as Context,
-                            "Something got wrong",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }) {
-
-                }
-                queue.add(reqPkms)
-            }
-        }
-
-        list.layoutManager = LinearLayoutManager(context)
-        list.adapter=MyCardRecyclerViewAdapter(pokemonsList.sortedBy { it.id },view)
 
             return view
         }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        list = view.findViewById(R.id.list)
+        list.layoutManager = LinearLayoutManager(context)
+        list.adapter=MyCardRecyclerViewAdapter(pokemonsList.sortedBy { it.id },view)
+    }
 }

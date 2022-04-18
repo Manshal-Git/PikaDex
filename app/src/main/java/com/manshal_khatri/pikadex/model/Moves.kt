@@ -6,5 +6,6 @@ data class Moves(
     val mid : Int,
     val learningLvl: Int,
     val name: String,
-    val url : String
+    val data : MoveData
+//    val url : String
 )
