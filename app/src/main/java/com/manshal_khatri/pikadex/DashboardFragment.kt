@@ -30,14 +30,14 @@ class DashboardFragment : Fragment() {
         // Inflate the layout for this fragment
 
         val view = inflater.inflate(R.layout.fragment_dashboard, container, false)
-
+        list = view.findViewById(R.id.list)
+        list.layoutManager = LinearLayoutManager(context)
+        list.adapter=MyCardRecyclerViewAdapter(pokemonsList.sortedBy { it.id },view)
             return view
         }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        list = view.findViewById(R.id.list)
-        list.layoutManager = LinearLayoutManager(context)
-        list.adapter=MyCardRecyclerViewAdapter(pokemonsList.sortedBy { it.id },view)
+
     }
 }

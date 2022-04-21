@@ -10,20 +10,19 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginVertical="4dp"
+        android:layout_height="113dp"
         android:layout_marginHorizontal="8dp"
-       >
+        android:layout_marginVertical="4dp">
 
 
-    <TextView
-        android:id="@+id/pokeName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:text="charmender"
-        android:textStyle="bold"
-        android:textSize="24sp"/>
+        <TextView
+            android:id="@+id/pokeName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:text="charmender"
+            android:textSize="24sp"
+            android:textStyle="bold" />
 
 
         <TextView
@@ -46,7 +45,6 @@
             android:id="@+id/poketype2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:layout_below="@+id/pokeName"
             android:layout_marginStart="4dp"
             android:layout_marginTop="8dp"
@@ -54,10 +52,11 @@
             android:layout_marginBottom="8dp"
             android:layout_toRightOf="@+id/poketype1"
             android:background="@drawable/type_bg_fire"
+            android:gravity="center"
             android:paddingHorizontal="16dp"
             android:textColor="@color/white"
             android:textSize="18sp"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
         <ImageView
             android:id="@+id/PokeSprite"
@@ -67,8 +66,17 @@
             android:layout_marginStart="4dp"
             android:layout_marginTop="4dp"
             android:layout_marginEnd="4dp"
-            android:layout_marginBottom="4dp"
-             />
+            android:layout_marginBottom="4dp" />
+
+        <View
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginEnd="0dp"
+            android:layout_marginBottom="3dp"
+            android:background="?android:attr/listDivider" />
 
     </RelativeLayout>
 </LinearLayout>

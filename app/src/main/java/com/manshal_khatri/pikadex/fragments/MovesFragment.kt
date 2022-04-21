@@ -24,9 +24,9 @@ class MovesFragment : Fragment() {
         movesRV = view.findViewById(R.id.moveListRV)
         movesRV.layoutManager = LinearLayoutManager(activity)
         if(pokeMoves.isNotEmpty() && pokeMoveData.isNotEmpty()){
-            movesRV.adapter = MovesAdapter(pokeMoves.sortedBy { it.learningLvl }, pokeMoveData)
+            movesRV.adapter = MovesAdapter(pokeMoves.sortedBy { it.learningLvl })
         }
-        movesRV.adapter = MovesAdapter(pokeMoves.sortedBy { it.learningLvl }, pokeMoveData)
+        movesRV.adapter = MovesAdapter(pokeMoves.sortedBy { it.learningLvl })
         return view
     }
 

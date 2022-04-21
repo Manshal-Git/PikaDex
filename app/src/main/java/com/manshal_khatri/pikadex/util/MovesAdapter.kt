@@ -9,9 +9,10 @@ import com.manshal_khatri.pikadex.R
 import com.manshal_khatri.pikadex.databinding.MoveCardBinding
 import com.manshal_khatri.pikadex.model.MoveData
 import com.manshal_khatri.pikadex.model.Moves
+import com.manshal_khatri.pikadex.pokeMoveData
 import com.squareup.picasso.Picasso
 
-class MovesAdapter(val moves : List<Moves> , val moveD : List<MoveData>) : RecyclerView.Adapter<MovesAdapter.ViewHolder>()  {
+class MovesAdapter(val moves : List<Moves> ) : RecyclerView.Adapter<MovesAdapter.ViewHolder>()  {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovesAdapter.ViewHolder {
         return ViewHolder(
@@ -23,26 +24,32 @@ class MovesAdapter(val moves : List<Moves> , val moveD : List<MoveData>) : Recyc
 
     override fun onBindViewHolder(holder: MovesAdapter.ViewHolder, position: Int) {
         val move = moves[position]
-        val moveData = moveD.find { move.mid == it.mid }
+        val moveData = pokeMoveData.find { move.name == it.name }
         with(holder){
             lvl.text = move.learningLvl.toString()
             movename.text = move.name
            if(moveData!=null){
                movetype.text = moveData.type
-               power.text = moveData.power.toString()
-               accuracy.text = moveData.accuracy.toString()
+               power.text = if(moveData.power==0){ "-"
+               }else{ moveData.power.toString()
+               }
+               accuracy.text = if(moveData.accuracy==0) "-" else moveData.accuracy.toString()
                pp.text = moveData.pp.toString()
-               when(moveData.kind){
-                   "Physical" -> Picasso.get().load(R.drawable.fire_wp).into(kind)
-                   "Special" -> Picasso.get().load(R.drawable.water_wp).into(kind)
-                   "State" -> Picasso.get().load(R.drawable.flying_wp).into(kind)
+               /*when(moveData.kind){
+                   "physical" -> Picasso.get().load(R.drawable.fire_wp).into(kind)
+                   "special" -> Picasso.get().load(R.drawable.water_wp).into(kind)
+                   "state" -> Picasso.get().load(R.drawable.flying_wp).into(kind)
                    else -> {}
+               }*/
+               if(moveData.kind == "physical"){
+                   Picasso.get().load(R.drawable.fire_wp).into(kind)
+               }else if(moveData.kind == "special"){
+                   Picasso.get().load(R.drawable.water_wp).into(kind)
+               }else{
+                   Picasso.get().load(R.drawable.flying_wp).into(kind)
                }
            }
-
         }
-
-
     }
 
     override fun getItemCount(): Int {

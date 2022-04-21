@@ -12,6 +12,7 @@ import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
+import com.bumptech.glide.Glide
 import com.manshal_khatri.pikadex.databinding.FragmentCardBinding
 import com.manshal_khatri.pikadex.fragments.placeholder.PlaceholderContent.PlaceholderItem
 import com.manshal_khatri.pikadex.model.Pokemons
@@ -19,9 +20,9 @@ import com.squareup.picasso.Picasso
 
 
 class MyCardRecyclerViewAdapter(
-     val values: List<Pokemons> , view : View
+     val values: List<Pokemons> ,view : View
 ) : RecyclerView.Adapter<MyCardRecyclerViewAdapter.ViewHolder>() {
-
+    val v = view
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
 
         return ViewHolder(
@@ -35,7 +36,6 @@ class MyCardRecyclerViewAdapter(
 
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-
         val item = values[position]
         holder.pokecard.setOnClickListener {
             val intent = Intent(it.context,DescriptionActivity::class.java)
@@ -53,8 +53,8 @@ class MyCardRecyclerViewAdapter(
             holder.pokeType2.visibility = GONE
         }
 
-
-        Picasso.get().load(item.spriteUrl).into(holder.pokeSprite)
+        Glide.with(v).load(item.spriteUrl).into(holder.pokeSprite)
+       // Picasso.get().load(item.spriteUrl).into(holder.pokeSprite)
     }
 
 

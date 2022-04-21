@@ -51,50 +51,101 @@ class TypeFragment : Fragment() {
         layoutDisAd4x = view.findViewById(R.id.disItemContainer4x)
         val curPkmnType1 = pokemon?.pokeType?.type1
         val curPkmnType2 = pokemon?.pokeType?.type2
-        val advListType1 = pokeTypeData.find { curPkmnType1 == it.name }?.advantage
-        val advListType2 = pokeTypeData.find { curPkmnType2 == it.name }?.advantage
-        val disadvListType1 = pokeTypeData.find { curPkmnType1 == it.name }?.disAdvantage
-        val disadvListType2 = pokeTypeData.find { curPkmnType2 == it.name }?.disAdvantage
-        if (advListType1 != null  && advListType2 != null){
-            val advIntersect = advListType1.intersect(advListType2)
-            val adv2x = ((advListType1.union(advListType2)).minus(disadvListType1)).minus(disadvListType2).minus(advIntersect)
-            setupTVs(
-                adv2x as Set<String>,
-                layoutAd2x
-            )
-            setupTVs(advIntersect,layoutAd4x)
+        if(curPkmnType2!=""){
+            val advListType1 = pokeTypeData.find { curPkmnType1 == it.name }?.advantage
+            val advListType2 = pokeTypeData.find { curPkmnType2 == it.name }?.advantage
+            val disadvListType1 = pokeTypeData.find { curPkmnType1 == it.name }?.disAdvantage
+            val disadvListType2 = pokeTypeData.find { curPkmnType2 == it.name }?.disAdvantage
+            if (advListType1 != null  && advListType2 != null){
+                val advIntersect = advListType1.intersect(advListType2)
+                val adv2x = ((advListType1.union(advListType2)).minus(disadvListType1)).minus(disadvListType2).minus(advIntersect)
+                setupTVs2(
+                    adv2x as Set<String>,
+                    layoutAd2x
+                )
+                setupTVs2(advIntersect ,layoutAd4x)
+            }
+            if (disadvListType2 != null && disadvListType1 != null) {
+                val disadvIntersect = disadvListType1.intersect(disadvListType2)
+                val disadv2x = (((disadvListType1.union(disadvListType2)).minus(advListType1)).minus(advListType2)).minus(disadvIntersect)
+                setupTVs2(disadv2x as Set<String>,layoutDisAd2x)
+                setupTVs2(disadvIntersect ,layoutDisAd4x)
+            }
+        }else{
+            val kist = listOf<String>()
+            val advListType1 = pokeTypeData.find { curPkmnType1 == it.name }?.advantage
+            val disadvListType1 = pokeTypeData.find { curPkmnType1 == it.name }?.disAdvantage
+            if (advListType1 != null ){
+                setupTVs1(
+                    advListType1,
+                    layoutAd2x
+                )
+                setupTVs1(kist,layoutAd4x)
+            }
+            if (disadvListType1 != null ){
+                setupTVs1(
+                    disadvListType1,
+                    layoutDisAd2x
+                )
+                setupTVs1(kist,layoutDisAd4x)
+            }
         }
-        if (disadvListType2 != null && disadvListType1 != null) {
-            val disadvIntersect = disadvListType1.intersect(disadvListType2)
-            val disadv2x = (((disadvListType1.union(disadvListType2)).minus(advListType1)).minus(advListType2)).minus(disadvIntersect)
-            setupTVs(disadv2x as Set<String>,layoutDisAd2x)
-            setupTVs(disadvIntersect,layoutDisAd4x)
-        }
-
-        // Adding the view dynamically
-       /* val newTV = TextView(activity)
-        newTV.setText(R.string.baseAPI)
-        layout = view.findViewById(R.id.itemContainer)
-        layout.addView(newTV,4)*/
 
         return view
     }
 
-    /*fun getPkmnType(pokemon: Pokemons){
-         types = pokemon.pokeType
-    }*/
-    fun setupTVs(list : Set<String>,parentLayout: LinearLayout){
+    fun setupTVs1(list: List<String>, parentLayout: LinearLayout){
             val x =LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT,)
-            for(element in list.indices){
+            if(list.isNotEmpty()){
+                for(element in list.indices){
+                    val newTV = TextView(activity)
+                    with(newTV){
+                        text = list.elementAt(element)
+                        textSize = 18.0F
+                        setPadding(24,0,24,0)
+                        x.setMargins(4,0,4,0)
+                        layoutParams = x
+                    }
+                    DescriptionActivity().setTypeTextcolor( list.elementAt(element),newTV)
+                    parentLayout.addView(newTV)
+                }
+            }else{
                 val newTV = TextView(activity)
                 with(newTV){
-                    text = list.elementAt(element)
+                    text = "none"
                     textSize = 18.0F
                     setPadding(24,0,24,0)
                     x.setMargins(4,0,4,0)
                     layoutParams = x
                 }
-                DescriptionActivity().setTypeTextcolor( list.elementAt(element),newTV)
+                parentLayout.addView(newTV)
+            }
+
+    }
+    fun setupTVs2(list: Set<String>, parentLayout: LinearLayout){
+        val x =LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT,)
+        if(list.isNotEmpty()) {
+            for (element in list.indices) {
+                val newTV = TextView(activity)
+                with(newTV) {
+                    text = list.elementAt(element)
+                    textSize = 18.0F
+                    setPadding(24, 0, 24, 0)
+                    x.setMargins(4, 0, 4, 0)
+                    layoutParams = x
+                }
+                DescriptionActivity().setTypeTextcolor(list.elementAt(element), newTV)
+                parentLayout.addView(newTV)
+            }
+        } else{
+                val newTV = TextView(activity)
+                with(newTV){
+                    text = "none"
+                    textSize = 18.0F
+                    setPadding(24,0,24,0)
+                    x.setMargins(4,0,4,0)
+                    layoutParams = x
+                }
                 parentLayout.addView(newTV)
             }
     }

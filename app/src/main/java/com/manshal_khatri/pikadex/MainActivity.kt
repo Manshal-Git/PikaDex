@@ -3,9 +3,11 @@ package com.manshal_khatri.pikadex
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
+import android.os.Handler
 import android.view.GestureDetector
 import android.view.Menu
 import android.view.MotionEvent
+import android.view.View.GONE
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.ui.AppBarConfiguration
@@ -13,12 +15,17 @@ import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
+import com.bumptech.glide.Glide
 import com.manshal_khatri.pikadex.databinding.ActivityMainBinding
 import com.manshal_khatri.pikadex.model.*
 import com.manshal_khatri.pikadex.util.APIs
+import com.squareup.picasso.Picasso
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.json.JSONObject
+import java.util.*
+import kotlin.concurrent.schedule
 import kotlin.math.abs
 
 val pokeApi = APIs.PKMN_API
@@ -27,7 +34,7 @@ val pokeMoves = mutableListOf<Moves>()
 var pokeMoveData = mutableListOf<MoveData>()
 var pokeTypeData = mutableListOf<TypesData>()
 var start = 1
-var limit = (5..15).random()
+var limit = 250 // (5..15).random()
 
 class MainActivity : AppCompatActivity() {
 
@@ -49,8 +56,11 @@ class MainActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+//        Picasso.get().load(R.drawable.pikantro).into(binding.imageView2)
+        Glide.with(this).load(R.drawable.pikantro).into(binding.imageView2)
         val queue = Volley.newRequestQueue(this)
         val typeQueue = Volley.newRequestQueue(this)
+        val movesQueue = Volley.newRequestQueue(this)
 //        gd = GestureDetector(this,this)
         GlobalScope.launch {
            if(pokemonsList.isEmpty()) {
@@ -142,10 +152,54 @@ class MainActivity : AppCompatActivity() {
                     Response.ErrorListener {
                         println("type fetching error")
                     }){}
-            queue.add(reqTypes)
+            typeQueue.add(reqTypes)
         }
+            for(i in 1 until APIs.MOVE_LIMIT){
+                val reqTypes = object :
+                    JsonObjectRequest(Request.Method.GET, APIs.Moves_API + "$i", null, Response.Listener { jsonObject ->
+                        println(" $i move fetching succeed")
+                        val kind =  jsonObject.getJSONObject("damage_class").getString("name")
+                        var power : Int
+                        var acc : Int
+                        try {
+                            power = jsonObject.getInt("power")
+                        }catch (e : Exception){
+                            power = 0
+                        }
+                        try {
+                            acc = jsonObject.getInt("accuracy")
+                        }catch (e : Exception){
+                            acc = 0
+                        }
+                        try {
+                            pokeMoveData.add(
+                                MoveData(
+                                    jsonObject.getInt("id"),
+                                    jsonObject.getString("name"),
+                                    power,
+                                    acc,
+                                    jsonObject.getInt("pp"),
+                                    jsonObject.getJSONObject("type").getString("name"),kind
+                                )
+                            )
+                        }catch (e: Exception){
+                            println(e)
+                        }
+                    },
+                        Response.ErrorListener {
+                            println("move fetching error")
+                        }){}
+                movesQueue.add(reqTypes)
+            }
        }
-        supportFragmentManager.beginTransaction().replace(R.id.pokeList_container, DashboardFragment()).commit()
+
+        Handler().postDelayed({
+            binding.imageView2.visibility = GONE
+            binding.pokeListContainer.background = null
+            supportFragmentManager.beginTransaction().replace(R.id.pokeList_container, DashboardFragment()).commit()
+        },5000)
+
+      //  supportFragmentManager.beginTransaction().replace(R.id.pokeList_container, DashboardFragment()).commit() // SHOULD BE DEPRECATED
         binding.button.setOnClickListener {
            supportFragmentManager.beginTransaction().replace(R.id.pokeList_container, DashboardFragment()).commit()
         }
@@ -156,6 +210,7 @@ class MainActivity : AppCompatActivity() {
         menuInflater.inflate(R.menu.menu_main, menu)
         return true
     }
+
  /*   override fun onDown(e: MotionEvent?): Boolean {
         return false
     }

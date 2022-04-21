@@ -55,7 +55,7 @@ gd = GestureDetector(this,this)
 
          pokeId = intent.getIntExtra("id" , 1)
         val queue = Volley.newRequestQueue(this)
-
+        getMoves(queue,pokeId)
        //GlobalScope.launch {  async { getMoves(queue,pokeId) } }
 
 
@@ -112,7 +112,7 @@ gd = GestureDetector(this,this)
         }
     } */
 
-    suspend fun getMoves(queue : RequestQueue, pokeId : Int){
+     fun getMoves(queue : RequestQueue, pokeId : Int){
         val request = object : JsonObjectRequest(Method.GET, pokeApi+"$pokeId",null,Response.Listener {
             print("Api Response success $it")
              pokeMoves.clear()
@@ -121,15 +121,13 @@ gd = GestureDetector(this,this)
             for( i in 0 until moveslist.length()){
                 val move = moveslist.getJSONObject(i)
                 //println(move.getJSONObject("move").getString("name"))
-                val lateVer = move.getJSONArray("version_group_details")
-                if(lateVer.getJSONObject(lateVer.length()-1).getJSONObject("move_learn_method").getString("name")=="level-up"){
-                    pokeMoves.add( Moves(i,
-                        lateVer.getJSONObject(lateVer.length()-1).getInt("level_learned_at"),
-                        move.getJSONObject("move").getString("name"),
-                        getMovedata(move.getJSONObject("move").getString("url"),i)
+                val latestVer = move.getJSONArray("version_group_details")
+                if(latestVer.getJSONObject(latestVer.length()-1).getJSONObject("move_learn_method").getString("name")=="level-up"){
+                    pokeMoves.add( Moves(
+                        latestVer.getJSONObject(latestVer.length()-1).getInt("level_learned_at"),
+                        move.getJSONObject("move").getString("name")
                     )
                     )
-
                 }
             }
         },Response.ErrorListener {
@@ -139,55 +137,11 @@ gd = GestureDetector(this,this)
         }
         queue.add(request)
     }
-     fun getMovedata(queue: RequestQueue) : MutableList<MoveData>{
-        val movedata = mutableListOf<MoveData>()
 
-            for(element in pokeMoves){
-                println(element)
-                val requesting = object : JsonObjectRequest(Method.GET, "",null,Response.Listener {
-                    print("Api Response success $it")
-                    // Getting movesdata
-                    val obj = it
-                    movedata.add(
-                        MoveData(
-                            element.mid,
-                            obj.getInt("power"),
-                            it.getInt("accuracy"),
-                            it.getInt("pp"),"norma",
-                            "Special"
-                        ))
-                },Response.ErrorListener {
-                    println("$it OCCURED HERE")
-                }){}
-                queue.add(requesting)
-            }
-        return movedata
-    }
 
     override fun onBackPressed() {
         super.onBackPressed()
         finish()
-    }
-     fun getMovedata(string: String,mid : Int) : MoveData {
-        var mymove : MoveData = MoveData(mid,110,100,10,"normal","kind")
-        val queuem = Volley.newRequestQueue(this)
-        val req = object : JsonObjectRequest(Method.GET, string,null,Response.Listener{
-            print("success with move")
-            mymove = MoveData(
-                mid,
-                it.getInt("power"),
-                it.getInt("accuracy"),
-                it.getInt("pp"),"norma",
-                "physical"
-            )
-        }, Response.ErrorListener {
-            print("error with move")
-        }) {
-
-        }
-        queuem.add(req)
-
-        return mymove
     }
     @SuppressLint("ResourceAsColor")
     fun setTypeTextcolor(type:String, holder : TextView){
@@ -218,7 +172,6 @@ gd = GestureDetector(this,this)
             "ghost"-> holder.setImageResource(R.drawable.ghost_wp)
             "normal"-> holder.setImageResource(R.drawable.normal_wp)
         }
-
     }
 
     override fun onDown(e: MotionEvent?): Boolean {
