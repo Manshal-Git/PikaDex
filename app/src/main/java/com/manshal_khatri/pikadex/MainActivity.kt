@@ -29,12 +29,12 @@ import kotlin.concurrent.schedule
 import kotlin.math.abs
 
 val pokeApi = APIs.PKMN_API
-val pokemonsList = mutableListOf<Pokemons>()
-val pokeMoves = mutableListOf<Moves>()
-var pokeMoveData = mutableListOf<MoveData>()
-var pokeTypeData = mutableListOf<TypesData>()
+val pokemonsList = mutableListOf<Pokemons>()                                 // PKMNS
+val pokeMoves = mutableListOf<Moves>()                                      // PKMN MOVES
+var pokeMoveData = mutableListOf<MoveData>()                              // MOVE DEATILS
+var pokeTypeData = mutableListOf<TypesData>()                              //PKMN TYPES DATA
 var start = 1
-var limit = 250 // (5..15).random()
+var limit = 5 // (5..15).random()
 
 class MainActivity : AppCompatActivity() {
 
@@ -49,20 +49,17 @@ class MainActivity : AppCompatActivity() {
    // private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-//        Picasso.get().load(R.drawable.pikantro).into(binding.imageView2)
         Glide.with(this).load(R.drawable.pikantro).into(binding.imageView2)
         val queue = Volley.newRequestQueue(this)
         val typeQueue = Volley.newRequestQueue(this)
         val movesQueue = Volley.newRequestQueue(this)
 //        gd = GestureDetector(this,this)
-        GlobalScope.launch {
+        /*GlobalScope.launch {*/
            if(pokemonsList.isEmpty()) {
                for (i in start until limit) {
 
@@ -71,14 +68,15 @@ class MainActivity : AppCompatActivity() {
 
                            println("Category API success ${it.getInt("id")}")
                            val pokeObj = it
+                           val statsArr = pokeObj.getJSONArray("stats")
+                           var si = 0
                            if (pokeObj.getJSONArray("types")
                                    .length() == 2
                            ) {   // IF POKEMON HAS 2 TYPES
-
                                pokemonsList.add(
                                    Pokemons(
                                        pokeObj.getInt("id"),
-                                       pokeObj.getString("name") + pokeObj.getInt("id").toString(),
+                                       pokeObj.getString("name"),
                                        Types(
                                            pokeObj.getJSONArray("types").getJSONObject(0)
                                                .getJSONObject("type")
@@ -88,8 +86,16 @@ class MainActivity : AppCompatActivity() {
                                                .getString("name")
                                        ),
                                        pokeObj.getJSONObject("sprites").getJSONObject("other")
-                                           .getJSONObject("home").getString("front_default")
-                                   )
+                                           .getJSONObject("home").getString("front_default"),
+                                       Stats(
+                                           statsArr.getJSONObject(si++).getInt("base_stat"),
+                                           statsArr.getJSONObject(si++).getInt("base_stat"),
+                                           statsArr.getJSONObject(si++).getInt("base_stat"),
+                                           statsArr.getJSONObject(si++).getInt("base_stat"),
+                                           statsArr.getJSONObject(si++).getInt("base_stat"),
+                                           statsArr.getJSONObject(si).getInt("base_stat"),
+                                       )
+                                   ),
                                )
                            } else {
                                pokemonsList.add(
@@ -102,7 +108,15 @@ class MainActivity : AppCompatActivity() {
                                                .getString("name"), ""
                                        ),
                                        pokeObj.getJSONObject("sprites").getJSONObject("other")
-                                           .getJSONObject("home").getString("front_default")
+                                           .getJSONObject("home").getString("front_default"),
+                                       Stats(
+                                           statsArr.getJSONObject(si++).getInt("base_stat"),
+                                           statsArr.getJSONObject(si++).getInt("base_stat"),
+                                           statsArr.getJSONObject(si++).getInt("base_stat"),
+                                           statsArr.getJSONObject(si++).getInt("base_stat"),
+                                           statsArr.getJSONObject(si++).getInt("base_stat"),
+                                           statsArr.getJSONObject(si).getInt("base_stat"),
+                                       )
                                    )
                                )
                            }
@@ -199,7 +213,6 @@ class MainActivity : AppCompatActivity() {
             supportFragmentManager.beginTransaction().replace(R.id.pokeList_container, DashboardFragment()).commit()
         },5000)
 
-      //  supportFragmentManager.beginTransaction().replace(R.id.pokeList_container, DashboardFragment()).commit() // SHOULD BE DEPRECATED
         binding.button.setOnClickListener {
            supportFragmentManager.beginTransaction().replace(R.id.pokeList_container, DashboardFragment()).commit()
         }

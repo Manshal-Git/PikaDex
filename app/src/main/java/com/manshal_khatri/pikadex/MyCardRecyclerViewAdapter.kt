@@ -2,7 +2,6 @@ package com.manshal_khatri.pikadex
 
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Intent
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
@@ -14,7 +13,6 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.manshal_khatri.pikadex.databinding.FragmentCardBinding
-import com.manshal_khatri.pikadex.fragments.placeholder.PlaceholderContent.PlaceholderItem
 import com.manshal_khatri.pikadex.model.Pokemons
 import com.squareup.picasso.Picasso
 
@@ -69,6 +67,7 @@ class MyCardRecyclerViewAdapter(
 
     }
 
+
     @SuppressLint("ResourceAsColor")
     fun setTypecolor(type:String , holder : TextView){
         when(type){
@@ -84,6 +83,15 @@ class MyCardRecyclerViewAdapter(
                 holder.setTextColor(R.color.black)}
             "normal"-> { holder.setBackgroundResource(R.drawable.type_bg_normal)
                         holder.setTextColor(R.color.black)}
+            "fairy" -> holder.setBackgroundResource(R.drawable.type_bg_fairy)
+            "fighting" -> holder.setBackgroundResource(R.drawable.type_bg_fighting)
+            "ground" -> holder.setBackgroundResource(R.drawable.type_bg_ground)
+            "rock" -> holder.setBackgroundResource(R.drawable.type_bg_rock)
+            "bug" -> holder.setBackgroundResource(R.drawable.type_bg_bug)
+            "steel" -> holder.setBackgroundResource(R.drawable.type_bg_steel)
+            "ice" -> holder.setBackgroundResource(R.drawable.type_bg_ice)
+            "dragon" -> holder.setBackgroundResource(R.drawable.type_bg_dragon)
+            "dark" -> holder.setBackgroundResource(R.drawable.type_bg_dark)
         }
     }
 

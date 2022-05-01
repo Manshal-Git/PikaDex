@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -25,22 +26,14 @@ import com.manshal_khatri.pikadex.model.Moves
 import com.manshal_khatri.pikadex.model.Pokemons
 import com.squareup.picasso.Picasso
 import kotlin.math.abs
-var pokemon : Pokemons? = Pokemons()
-class DescriptionActivity : AppCompatActivity() , GestureDetector.OnGestureListener {
+var pokemon : Pokemons? = Pokemons() // CURRENT PKMN OBJ CAN BE USED IN CHILD FRAGMENTS
+class DescriptionActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityDescriptionBinding
  private  lateinit var mBinding: ConstraintSet
+    private  lateinit var mBinding2: ConstraintSet
  var pokeId = 4
 
-//lateinit var list : SwipeListner
-    var x1 : Float = 0.0f
-    var x2 : Float = 0.0f
-    var y1 : Float = 0.0f
-    var y2 : Float = 0.0f
-    lateinit var gd : GestureDetector
-    companion object{
-        const val TH = 100
-    }
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,33 +43,34 @@ class DescriptionActivity : AppCompatActivity() , GestureDetector.OnGestureListe
         setContentView(binding.root)
 
         mBinding = binding.root.getConstraintSet(R.id.end )
+        mBinding2 = binding.root.getConstraintSet(R.id.start)
+
         val t1 = mBinding.getConstraint(R.id.type1)
-gd = GestureDetector(this,this)
+        val t2 = mBinding2.getConstraint(R.id.type1)
 
          pokeId = intent.getIntExtra("id" , 1)
         val queue = Volley.newRequestQueue(this)
         getMoves(queue,pokeId)
-       //GlobalScope.launch {  async { getMoves(queue,pokeId) } }
 
 
         if (intent!=null){
             pokemon = pokemonsList.find {  pokeId == it.id  }
             val tmpPk = pokemon!!
             if (pokemon != null) {
-                //TypeFragment().getPkmnType(tmpPk)
-                binding.pokeName.text = tmpPk.pokeName
+                binding.pokeName.text = tmpPk.pokeName.replaceFirst(tmpPk.pokeName.first(),tmpPk.pokeName.first().uppercaseChar())
                 Picasso.get().load(tmpPk.spriteUrl).into(binding.PokeSprite)
 
                 if(tmpPk.pokeType.type2!=""){
                     binding.type2.text = tmpPk.pokeType.type2
+                    t2.propertySet.visibility = VISIBLE
                     binding.type1.text = tmpPk.pokeType.type1
                     setTypeTextcolor(tmpPk.pokeType.type2,binding.type2)
                     tmpPk.pokeType.type1.let { setTypeTextcolor(it,binding.type1)
                         setTypeBG(it,binding.imageView)}
-
                 }else{
                     binding.type1.visibility= GONE
                     t1.propertySet.visibility = GONE
+//                    t2.propertySet.visibility = GONE
                     binding.type2.text = tmpPk.pokeType.type1
                     tmpPk.pokeType.type1.let { setTypeTextcolor(it,binding.type2)
                         setTypeBG(it,binding.imageView)}
@@ -104,13 +98,6 @@ gd = GestureDetector(this,this)
         supportFragmentManager.beginTransaction().add(R.id.desc_frag_container,InfoFragment()).commit()
 
     }
-    /*fun sendPkmn(fragment: FragmentActivity) : Pokemons? {
-        if(pokemon!= null){
-            return pokemon
-        }else{
-            return Pokemons(404)
-        }
-    } */
 
      fun getMoves(queue : RequestQueue, pokeId : Int){
         val request = object : JsonObjectRequest(Method.GET, pokeApi+"$pokeId",null,Response.Listener {
@@ -120,7 +107,6 @@ gd = GestureDetector(this,this)
             val moveslist = it.getJSONArray("moves")
             for( i in 0 until moveslist.length()){
                 val move = moveslist.getJSONObject(i)
-                //println(move.getJSONObject("move").getString("name"))
                 val latestVer = move.getJSONArray("version_group_details")
                 if(latestVer.getJSONObject(latestVer.length()-1).getJSONObject("move_learn_method").getString("name")=="level-up"){
                     pokeMoves.add( Moves(
@@ -132,9 +118,7 @@ gd = GestureDetector(this,this)
             }
         },Response.ErrorListener {
             print("Api Response failed $it")
-        }){
-
-        }
+        }){}
         queue.add(request)
     }
 
@@ -158,6 +142,15 @@ gd = GestureDetector(this,this)
             "ghost"-> holder.setBackgroundResource(R.drawable.type_bg_ghost)
             "normal"-> {holder.setBackgroundResource(R.drawable.type_bg_normal)
                 holder.setTextColor(R.color.black)}
+            "fairy" -> holder.setBackgroundResource(R.drawable.type_bg_fairy)
+            "fighting" -> holder.setBackgroundResource(R.drawable.type_bg_fighting)
+            "ground" -> holder.setBackgroundResource(R.drawable.type_bg_ground)
+            "rock" -> holder.setBackgroundResource(R.drawable.type_bg_rock)
+            "bug" -> holder.setBackgroundResource(R.drawable.type_bg_bug)
+            "steel" -> holder.setBackgroundResource(R.drawable.type_bg_steel)
+            "ice" -> holder.setBackgroundResource(R.drawable.type_bg_ice)
+            "dragon" -> holder.setBackgroundResource(R.drawable.type_bg_dragon)
+            "dark" -> holder.setBackgroundResource(R.drawable.type_bg_dark)
         }
     }
     fun setTypeBG(type: String, holder: ImageView){
@@ -171,76 +164,17 @@ gd = GestureDetector(this,this)
             "flying"-> holder.setImageResource(R.drawable.flying_wp)
             "ghost"-> holder.setImageResource(R.drawable.ghost_wp)
             "normal"-> holder.setImageResource(R.drawable.normal_wp)
+            "fairy" -> holder.setBackgroundResource(R.drawable.fairy_wp)
+            "fighting" -> holder.setBackgroundResource(R.drawable.fighting_wp)
+            "ground" -> holder.setBackgroundResource(R.drawable.ground_wp)
+            "rock" -> holder.setBackgroundResource(R.drawable.rock_wp)
+            "bug" -> holder.setBackgroundResource(R.drawable.bug_wp)
+            "steel" -> holder.setBackgroundResource(R.drawable.steel_wp)
+            "ice" -> holder.setBackgroundResource(R.drawable.ice_wp)
+            "dragon" -> holder.setBackgroundResource(R.drawable.dragon_wp)
+            "dark" -> holder.setBackgroundResource(R.drawable.dark_wp)
         }
     }
-
-    override fun onDown(e: MotionEvent?): Boolean {
-        return false
-    }
-
-    override fun onShowPress(e: MotionEvent?) {
-    }
-
-    override fun onSingleTapUp(e: MotionEvent?): Boolean {
-        return false
-    }
-
-    override fun onScroll(
-        e1: MotionEvent?,
-        e2: MotionEvent?,
-        distanceX: Float,
-        distanceY: Float
-    ): Boolean {
-        return false
-    }
-
-    override fun onLongPress(e: MotionEvent?) {
-
-    }
-
-    override fun onFling(
-        e1: MotionEvent?,
-        e2: MotionEvent?,
-        velocityX: Float,
-        velocityY: Float
-    ): Boolean {
-        return false
-    }
-    override fun onTouchEvent(event: MotionEvent?): Boolean {
-        gd.onTouchEvent(event)
-        when(event?.action){
-            0 ->{
-                x1 = event.x
-                y1=event.y
-            }
-            1-> {
-                x2 = event.x
-                y2=event.y
-                val v1 : Float = x2-x1
-                val v2 : Float = y2-y1
-                if(abs(v1) > MainActivity.TH){
-                    if(x2 > x1){
-                        println("RIGHT")
-                        Toast.makeText(this, "Right", Toast.LENGTH_SHORT).show()
-                    }else{
-                        println("LEFT")
-                        Toast.makeText(this, "Left", Toast.LENGTH_SHORT).show()
-                    }
-                }else if(abs(v2) > MainActivity.TH){
-                    if(y2 > y1){
-                        println("BOTTOM")
-                        Toast.makeText(this, "Bottom", Toast.LENGTH_SHORT).show()
-                    }else{
-                        println("TOP")
-                        Toast.makeText(this, "Top", Toast.LENGTH_SHORT).show()
-                    }
-                }
-            }
-        }
-        return super.onTouchEvent(event)
-    }
-
-
     /*fun setStatusbar(){
             val window = this.window
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
@@ -248,73 +182,3 @@ gd = GestureDetector(this,this)
         window.statusBarColor=this.resources.getColor(R.color.TintSky)
     }*/
 }
-/*class SwipeListner(view : View,context: Context) : GestureDetector.OnGestureListener {
-    var x1 = 0.0f
-    var x2 = 0.0f
-    var y1 = 0.0f
-    var y2 = 0.0f
-    companion object{
-        const val TH = 100
-    }
-
-    override fun onDown(e: MotionEvent?): Boolean {
-        TODO("Not yet implemented")
-        return false
-    }
-
-    override fun onShowPress(e: MotionEvent?) {
-        TODO("Not yet implemented")
-
-    }
-
-    override fun onSingleTapUp(e: MotionEvent?): Boolean {
-        TODO("Not yet implemented")
-        return false
-    }
-
-    override fun onScroll(
-        e1: MotionEvent?,
-        e2: MotionEvent?,
-        distanceX: Float,
-        distanceY: Float
-    ): Boolean {
-        TODO("Not yet implemented")
-        return false
-    }
-
-    override fun onLongPress(e: MotionEvent?) {
-        TODO("Not yet implemented")
-    }
-
-    override fun onFling(
-        e1: MotionEvent?,
-        e2: MotionEvent?,
-        velocityX: Float,
-        velocityY: Float
-    ): Boolean {
-        TODO("Not yet implemented")
-    }
-
-    override fun onTouchEvent(event : MotionEvent?) : Boolean{
-        when(event?.action){
-            0 ->{
-                x1 = event.x
-                y1=event.y
-            }
-            1-> {
-                x2 = event.x
-                y2=event.y
-                val v1 = x2-x1
-                val v2 = y2-y1
-                if(abs(v1)>TH){
-                    if(x2 > x1){
-                        println("RIGHT")
-                    }else{
-                        println("LEFT")
-                    }
-                }
-            }
-        }
-        return super.onTouchEvent(event)
-    }
-}*/

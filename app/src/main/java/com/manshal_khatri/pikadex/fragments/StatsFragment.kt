@@ -6,6 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.manshal_khatri.pikadex.R
+import com.manshal_khatri.pikadex.databinding.FragmentStatsBinding
+import com.manshal_khatri.pikadex.pokemon
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -21,7 +23,7 @@ class StatsFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
-
+    lateinit var binding: FragmentStatsBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -35,9 +37,28 @@ class StatsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_stats, container, false)
+        val view= inflater.inflate(R.layout.fragment_stats, container, false)
+        binding = FragmentStatsBinding.bind(view)
+        binding.PB1.progress = pokemon?.stats?.hp!!
+        binding.PB2.progress = pokemon?.stats?.attack!!
+        binding.PB3.progress = pokemon?.stats?.defence!!
+        binding.PB4.progress = pokemon?.stats?.spAtk!!
+        binding.PB5.progress = pokemon?.stats?.spDef!!
+        binding.PB6.progress = pokemon?.stats?.speed!!
+        binding.TV1.text = pokemon?.stats?.hp.toString()
+        binding.TV2.text = pokemon?.stats?.attack.toString()
+        binding.TV3.text = pokemon?.stats?.defence.toString()
+        binding.TV4.text = pokemon?.stats?.spAtk.toString()
+        binding.TV5.text = pokemon?.stats?.spDef.toString()
+        binding.TV6.text = pokemon?.stats?.speed.toString()
+        binding.TVAvg.text = binding.TVAvg.text.toString() + ((pokemon?.stats?.hp!!+pokemon?.stats?.attack!!+pokemon?.stats?.defence!!+pokemon?.stats?.spAtk!!+pokemon?.stats?.spDef!!+pokemon?.stats?.speed!!)/6).toString()// + "/255"
+      return view
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+    }
     companion object {
         /**
          * Use this factory method to create a new instance of
