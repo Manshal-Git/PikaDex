@@ -1,12 +1,13 @@
 package com.manshal_khatri.pikadex.model
 
-import org.json.JSONArray
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
+@Entity(tableName = "Pokemon")
 data class Pokemons(
-
     val id : Int = 0,
-    val pokeName : String = "",
-    val pokeType : Types = Types(),
+    @PrimaryKey val pokeName : String = "",
+    val pokeType : PokeTypes = PokeTypes(),
     val spriteUrl:String ="",
-    val stats : Stats = Stats(0,0,0,0,0,0,)
+    val stats : Stats = Stats()
 )

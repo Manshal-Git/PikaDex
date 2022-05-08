@@ -6,8 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.manshal_khatri.pikadex.R
-import com.manshal_khatri.pikadex.databinding.FragmentStatsBinding
-import com.manshal_khatri.pikadex.pokemon
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -16,14 +14,14 @@ private const val ARG_PARAM2 = "param2"
 
 /**
  * A simple [Fragment] subclass.
- * Use the [StatsFragment.newInstance] factory method to
+ * Use the [EvolutionChainFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class StatsFragment : Fragment() {
+class EvolutionChainFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
-    lateinit var binding: FragmentStatsBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -37,28 +35,9 @@ class StatsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val view= inflater.inflate(R.layout.fragment_stats, container, false)
-        binding = FragmentStatsBinding.bind(view)
-        binding.PB1.progress = pokemon?.stats?.hp?.toInt()!!
-        binding.PB2.progress = pokemon?.stats?.attack?.toInt()!!
-        binding.PB3.progress = pokemon?.stats?.defence?.toInt()!!
-        binding.PB4.progress = pokemon?.stats?.spAtk?.toInt()!!
-        binding.PB5.progress = pokemon?.stats?.spDef?.toInt()!!
-        binding.PB6.progress = pokemon?.stats?.speed?.toInt()!!
-        binding.TV1.text = pokemon?.stats?.hp.toString()
-        binding.TV2.text = pokemon?.stats?.attack.toString()
-        binding.TV3.text = pokemon?.stats?.defence.toString()
-        binding.TV4.text = pokemon?.stats?.spAtk.toString()
-        binding.TV5.text = pokemon?.stats?.spDef.toString()
-        binding.TV6.text = pokemon?.stats?.speed.toString()
-        binding.TVAvg.text = binding.TVAvg.text.toString() + ((pokemon?.stats?.hp?.toInt()!!+pokemon?.stats?.attack?.toInt()!!+pokemon?.stats?.defence?.toInt()!!+pokemon?.stats?.spAtk?.toInt()!!+pokemon?.stats?.spDef?.toInt()!!+pokemon?.stats?.speed?.toInt()!!)/6).toString()// + "/255"
-      return view
+        return inflater.inflate(R.layout.fragment_evolution_chain, container, false)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-    }
     companion object {
         /**
          * Use this factory method to create a new instance of
@@ -66,12 +45,12 @@ class StatsFragment : Fragment() {
          *
          * @param param1 Parameter 1.
          * @param param2 Parameter 2.
-         * @return A new instance of fragment StatsFragment.
+         * @return A new instance of fragment EvolutionChainFragment.
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
-            StatsFragment().apply {
+            EvolutionChainFragment().apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
                     putString(ARG_PARAM2, param2)

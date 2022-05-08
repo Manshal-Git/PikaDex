@@ -1,16 +1,10 @@
 package com.manshal_khatri.pikadex
 
-import android.annotation.SuppressLint
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.GestureDetector
-import android.view.MotionEvent
 import android.view.View.GONE
 import android.view.View.VISIBLE
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintSet
 import com.android.volley.RequestQueue
@@ -18,14 +12,15 @@ import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.manshal_khatri.pikadex.databinding.ActivityDescriptionBinding
-import com.manshal_khatri.pikadex.fragments.InfoFragment
+import com.manshal_khatri.pikadex.fragments.GenericInfoFragment
 import com.manshal_khatri.pikadex.fragments.LocationFragment
 import com.manshal_khatri.pikadex.fragments.MovesFragment
-import com.manshal_khatri.pikadex.model.MoveData
 import com.manshal_khatri.pikadex.model.Moves
 import com.manshal_khatri.pikadex.model.Pokemons
+import com.manshal_khatri.pikadex.util.APIs
+import com.manshal_khatri.pikadex.util.TypeResourseSetter
 import com.squareup.picasso.Picasso
-import kotlin.math.abs
+
 var pokemon : Pokemons? = Pokemons() // CURRENT PKMN OBJ CAN BE USED IN CHILD FRAGMENTS
 class DescriptionActivity : AppCompatActivity() {
 
@@ -47,7 +42,7 @@ class DescriptionActivity : AppCompatActivity() {
 
         val t1 = mBinding.getConstraint(R.id.type1)
         val t2 = mBinding2.getConstraint(R.id.type1)
-
+        val colorSetter = TypeResourseSetter()
          pokeId = intent.getIntExtra("id" , 1)
         val queue = Volley.newRequestQueue(this)
         getMoves(queue,pokeId)
@@ -59,21 +54,21 @@ class DescriptionActivity : AppCompatActivity() {
             if (pokemon != null) {
                 binding.pokeName.text = tmpPk.pokeName.replaceFirst(tmpPk.pokeName.first(),tmpPk.pokeName.first().uppercaseChar())
                 Picasso.get().load(tmpPk.spriteUrl).into(binding.PokeSprite)
-
+                binding.textView.text = tmpPk.id.toString()
                 if(tmpPk.pokeType.type2!=""){
                     binding.type2.text = tmpPk.pokeType.type2
                     t2.propertySet.visibility = VISIBLE
                     binding.type1.text = tmpPk.pokeType.type1
-                    setTypeTextcolor(tmpPk.pokeType.type2,binding.type2)
-                    tmpPk.pokeType.type1.let { setTypeTextcolor(it,binding.type1)
-                        setTypeBG(it,binding.imageView)}
+                    binding.type2.setBackgroundResource(colorSetter.setTypecolor(tmpPk.pokeType.type2))
+                    tmpPk.pokeType.type1.let { binding.type1.setBackgroundResource(colorSetter.setTypecolor(it))
+                        binding.imageView.setImageResource(colorSetter.setTypeBG(it))}
                 }else{
                     binding.type1.visibility= GONE
                     t1.propertySet.visibility = GONE
 //                    t2.propertySet.visibility = GONE
                     binding.type2.text = tmpPk.pokeType.type1
-                    tmpPk.pokeType.type1.let { setTypeTextcolor(it,binding.type2)
-                        setTypeBG(it,binding.imageView)}
+                    tmpPk.pokeType.type1.let { binding.type2.setBackgroundResource(colorSetter.setTypecolor(it))
+                        binding.imageView.setImageResource(colorSetter.setTypeBG(it))}
                 }
             }
         }
@@ -85,7 +80,7 @@ class DescriptionActivity : AppCompatActivity() {
                     return@setOnNavigationItemSelectedListener  true
                 }
                 R.id.action_stats -> {
-                    supportFragmentManager.beginTransaction().replace(R.id.desc_frag_container,InfoFragment()).commitNow()
+                    supportFragmentManager.beginTransaction().replace(R.id.desc_frag_container,GenericInfoFragment()).commitNow()
                     return@setOnNavigationItemSelectedListener  true
                 }
                 else -> {
@@ -95,12 +90,12 @@ class DescriptionActivity : AppCompatActivity() {
             }
         }
 
-        supportFragmentManager.beginTransaction().add(R.id.desc_frag_container,InfoFragment()).commit()
+        supportFragmentManager.beginTransaction().add(R.id.desc_frag_container,GenericInfoFragment()).commit()
 
     }
 
      fun getMoves(queue : RequestQueue, pokeId : Int){
-        val request = object : JsonObjectRequest(Method.GET, pokeApi+"$pokeId",null,Response.Listener {
+        val request = object : JsonObjectRequest(Method.GET, APIs.PKMN_API+"$pokeId",null,Response.Listener {
             print("Api Response success $it")
              pokeMoves.clear()
             // Getting moves
@@ -126,54 +121,6 @@ class DescriptionActivity : AppCompatActivity() {
     override fun onBackPressed() {
         super.onBackPressed()
         finish()
-    }
-    @SuppressLint("ResourceAsColor")
-    fun setTypeTextcolor(type:String, holder : TextView){
-        when(type){
-            "grass" -> holder.setBackgroundResource(R.drawable.type_bg_grass)
-            "poison" -> holder.setBackgroundResource(R.drawable.type_bg_poison)
-            "fire" -> holder.setBackgroundResource(R.drawable.type_bg_fire)
-            "water" -> holder.setBackgroundResource(R.drawable.type_bg_water)
-            "electric" -> {holder.setBackgroundResource(R.drawable.type_bg_electric)
-                holder.setTextColor(R.color.black)}
-            "psychic" -> holder.setBackgroundResource(R.drawable.type_bg_psychic)
-            "flying"-> {holder.setBackgroundResource(R.drawable.type_bg_flying)
-                holder.setTextColor(R.color.black)}
-            "ghost"-> holder.setBackgroundResource(R.drawable.type_bg_ghost)
-            "normal"-> {holder.setBackgroundResource(R.drawable.type_bg_normal)
-                holder.setTextColor(R.color.black)}
-            "fairy" -> holder.setBackgroundResource(R.drawable.type_bg_fairy)
-            "fighting" -> holder.setBackgroundResource(R.drawable.type_bg_fighting)
-            "ground" -> holder.setBackgroundResource(R.drawable.type_bg_ground)
-            "rock" -> holder.setBackgroundResource(R.drawable.type_bg_rock)
-            "bug" -> holder.setBackgroundResource(R.drawable.type_bg_bug)
-            "steel" -> holder.setBackgroundResource(R.drawable.type_bg_steel)
-            "ice" -> holder.setBackgroundResource(R.drawable.type_bg_ice)
-            "dragon" -> holder.setBackgroundResource(R.drawable.type_bg_dragon)
-            "dark" -> holder.setBackgroundResource(R.drawable.type_bg_dark)
-        }
-    }
-    fun setTypeBG(type: String, holder: ImageView){
-        when(type){
-            "grass" ->  holder.setImageResource(R.drawable.grass_wp)
-            "poison" -> holder.setImageResource(R.drawable.posion_wp)
-            "fire" -> holder.setImageResource(R.drawable.fire_wp)
-            "water" -> holder.setImageResource(R.drawable.water_wp)
-            "electric" -> holder.setImageResource(R.drawable.electric_wp)
-            "psychic" -> holder.setImageResource(R.drawable.psychic_wp)
-            "flying"-> holder.setImageResource(R.drawable.flying_wp)
-            "ghost"-> holder.setImageResource(R.drawable.ghost_wp)
-            "normal"-> holder.setImageResource(R.drawable.normal_wp)
-            "fairy" -> holder.setBackgroundResource(R.drawable.fairy_wp)
-            "fighting" -> holder.setBackgroundResource(R.drawable.fighting_wp)
-            "ground" -> holder.setBackgroundResource(R.drawable.ground_wp)
-            "rock" -> holder.setBackgroundResource(R.drawable.rock_wp)
-            "bug" -> holder.setBackgroundResource(R.drawable.bug_wp)
-            "steel" -> holder.setBackgroundResource(R.drawable.steel_wp)
-            "ice" -> holder.setBackgroundResource(R.drawable.ice_wp)
-            "dragon" -> holder.setBackgroundResource(R.drawable.dragon_wp)
-            "dark" -> holder.setBackgroundResource(R.drawable.dark_wp)
-        }
     }
     /*fun setStatusbar(){
             val window = this.window

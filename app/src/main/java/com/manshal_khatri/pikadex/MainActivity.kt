@@ -1,40 +1,33 @@
 package com.manshal_khatri.pikadex
 
-import android.annotation.SuppressLint
-import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.Handler
 import android.view.GestureDetector
 import android.view.Menu
-import android.view.MotionEvent
 import android.view.View.GONE
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.ui.AppBarConfiguration
+import androidx.lifecycle.ViewModelProvider
 import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.bumptech.glide.Glide
 import com.manshal_khatri.pikadex.databinding.ActivityMainBinding
+import com.manshal_khatri.pikadex.fragments.DashboardFragment
 import com.manshal_khatri.pikadex.model.*
+import com.manshal_khatri.pikadex.room.RoomDB
 import com.manshal_khatri.pikadex.util.APIs
-import com.squareup.picasso.Picasso
+import com.manshal_khatri.pikadex.viewmodel.PokemonViewmodel
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import org.json.JSONObject
-import java.util.*
-import kotlin.concurrent.schedule
-import kotlin.math.abs
 
 val pokeApi = APIs.PKMN_API
 val pokemonsList = mutableListOf<Pokemons>()                                 // PKMNS
 val pokeMoves = mutableListOf<Moves>()                                      // PKMN MOVES
-var pokeMoveData = mutableListOf<MoveData>()                              // MOVE DEATILS
-var pokeTypeData = mutableListOf<TypesData>()                              //PKMN TYPES DATA
+val pokeMoveData = mutableListOf<MoveData>()                              // MOVE DEATILS
+val pokeTypeData = mutableListOf<TypesData>()                              //PKMN TYPES DATA
 var start = 1
-var limit = 5 // (5..15).random()
 
 class MainActivity : AppCompatActivity() {
 
@@ -48,170 +41,258 @@ class MainActivity : AppCompatActivity() {
     }
    // private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
+    var dataSaved = false
+    var pokedataSaved = false
+    var typedataSaved = false
+    var movedataSaved = false
+    lateinit var sharedPreferences: SharedPreferences
+    lateinit var pokeDB : RoomDB
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        sharedPreferences = getSharedPreferences("pokeDB", MODE_PRIVATE)
         Glide.with(this).load(R.drawable.pikantro).into(binding.imageView2)
         val queue = Volley.newRequestQueue(this)
         val typeQueue = Volley.newRequestQueue(this)
         val movesQueue = Volley.newRequestQueue(this)
+         pokeDB = RoomDB.getDatabase(this)
+        val vm = ViewModelProvider(this).get(PokemonViewmodel::class.java)
+//        pokemonsList.add(Pokemons())                  // DEPRECATED
+//        pokeMoveData.add(MoveData(1,"scratch",100,100,25,"normal","special"))     //DEPRECATED
+        pokedataSaved = sharedPreferences.getBoolean("have_pokedata",pokedataSaved)
+        typedataSaved = sharedPreferences.getBoolean("have_typedata",typedataSaved)
+        movedataSaved = sharedPreferences.getBoolean("have_movedata",movedataSaved)
 //        gd = GestureDetector(this,this)
-        /*GlobalScope.launch {*/
-           if(pokemonsList.isEmpty()) {
-               for (i in start until limit) {
 
-                   val reqPkms = object :
-                       JsonObjectRequest(Request.Method.GET, pokeApi + "$i", null, Response.Listener {
+        GlobalScope.launch {
+            if (pokeDB.pkmnDao().isUpToDate() < APIs.LAST_POKEMON - 1) {
+                for (i in start until APIs.LAST_POKEMON) {
+                    val reqPkms = object :
+                        JsonObjectRequest(
+                            Request.Method.GET,
+                            APIs.PKMN_API + "$i",
+                            null,
+                            Response.Listener {
 
-                           println("Category API success ${it.getInt("id")}")
-                           val pokeObj = it
-                           val statsArr = pokeObj.getJSONArray("stats")
-                           var si = 0
-                           if (pokeObj.getJSONArray("types")
-                                   .length() == 2
-                           ) {   // IF POKEMON HAS 2 TYPES
-                               pokemonsList.add(
-                                   Pokemons(
-                                       pokeObj.getInt("id"),
-                                       pokeObj.getString("name"),
-                                       Types(
-                                           pokeObj.getJSONArray("types").getJSONObject(0)
-                                               .getJSONObject("type")
-                                               .getString("name"),
-                                           pokeObj.getJSONArray("types").getJSONObject(1)
-                                               .getJSONObject("type")
-                                               .getString("name")
-                                       ),
-                                       pokeObj.getJSONObject("sprites").getJSONObject("other")
-                                           .getJSONObject("home").getString("front_default"),
-                                       Stats(
-                                           statsArr.getJSONObject(si++).getInt("base_stat"),
-                                           statsArr.getJSONObject(si++).getInt("base_stat"),
-                                           statsArr.getJSONObject(si++).getInt("base_stat"),
-                                           statsArr.getJSONObject(si++).getInt("base_stat"),
-                                           statsArr.getJSONObject(si++).getInt("base_stat"),
-                                           statsArr.getJSONObject(si).getInt("base_stat"),
-                                       )
-                                   ),
-                               )
-                           } else {
-                               pokemonsList.add(
-                                   Pokemons(
-                                       pokeObj.getInt("id"),
-                                       pokeObj.getString("name"),
-                                       Types(
-                                           pokeObj.getJSONArray("types").getJSONObject(0)
-                                               .getJSONObject("type")
-                                               .getString("name"), ""
-                                       ),
-                                       pokeObj.getJSONObject("sprites").getJSONObject("other")
-                                           .getJSONObject("home").getString("front_default"),
-                                       Stats(
-                                           statsArr.getJSONObject(si++).getInt("base_stat"),
-                                           statsArr.getJSONObject(si++).getInt("base_stat"),
-                                           statsArr.getJSONObject(si++).getInt("base_stat"),
-                                           statsArr.getJSONObject(si++).getInt("base_stat"),
-                                           statsArr.getJSONObject(si++).getInt("base_stat"),
-                                           statsArr.getJSONObject(si).getInt("base_stat"),
-                                       )
-                                   )
-                               )
-                           }
+                                println("Category API success ${it.getInt("id")}")
+                                val pokeObj = it
+                                val statsArr = pokeObj.getJSONArray("stats")
+                                var si = 0
+                                if (pokeObj.getJSONArray("types")
+                                        .length() == 2
+                                ) {   // IF POKEMON HAS 2 TYPES
 
-                       }, Response.ErrorListener {
+                                       val pkmn = Pokemons(
+                                            pokeObj.getInt("id"),
+                                            pokeObj.getString("name"),
+                                            PokeTypes(
+                                                pokeObj.getJSONArray("types").getJSONObject(0)
+                                                    .getJSONObject("type")
+                                                    .getString("name"),
+                                                pokeObj.getJSONArray("types").getJSONObject(1)
+                                                    .getJSONObject("type")
+                                                    .getString("name")
+                                            ),
+                                            pokeObj.getJSONObject("sprites").getJSONObject("other")
+                                                .getJSONObject("home").getString("front_default"),
+                                            Stats(
+                                                statsArr.getJSONObject(si++).getInt("base_stat")
+                                                    .toString(),
+                                                statsArr.getJSONObject(si++).getInt("base_stat")
+                                                    .toString(),
+                                                statsArr.getJSONObject(si++).getInt("base_stat")
+                                                    .toString(),
+                                                statsArr.getJSONObject(si++).getInt("base_stat")
+                                                    .toString(),
+                                                statsArr.getJSONObject(si++).getInt("base_stat")
+                                                    .toString(),
+                                                statsArr.getJSONObject(si).getInt("base_stat")
+                                                    .toString(),
+                                            )
+                                        )
+                                    GlobalScope.launch { pokeDB.pkmnDao().storePokemon(pkmn) }
+//                                    pokemonsList.add(pkmn)
+                                    vm.addPkmn(pkmn)
+                                } else {
 
-                       }) {
 
-                   }
-                   queue.add(reqPkms)
-               }
-           }
-            for(i in 1 until APIs.LAST_TYPE){
-            val reqTypes = object :
-                JsonObjectRequest(Request.Method.GET, APIs.TYPES_API + "$i", null, Response.Listener {
-                    println(" $i type fetching succeed")
-                    val ad = it.getJSONObject("damage_relations").getJSONArray("double_damage_from")
-                    val adL = mutableListOf<String>()
-                    val dd = it.getJSONObject("damage_relations").getJSONArray("half_damage_from")
-                    val ddL = mutableListOf<String>()
-                    val nd = it.getJSONObject("damage_relations").getJSONArray("no_damage_from")
-                    val ndL = mutableListOf<String>()
-                    var x =0
-                    var y = 0
-                    var z = 0
-                    while(x < ad.length() || y < dd.length() || z < nd.length()){
-                        if(x<ad.length()){
-                            ddL.add(ad.getJSONObject(x).getString("name"))
-                            x++
-                        }
-                        if(y < dd.length()){
-                            adL.add(dd.getJSONObject(y).getString("name"))
-                            y++
-                        }
-                        if(z < nd.length()){
-                            ndL.add(nd.getJSONObject(z).getString("name"))
-                            z++
-                        }
+                                    val pkmn = Pokemons(
+                                        pokeObj.getInt("id"),
+                                        pokeObj.getString("name"),
+                                        PokeTypes(
+                                            pokeObj.getJSONArray("types").getJSONObject(0)
+                                                .getJSONObject("type")
+                                                .getString("name"), ""
+                                        ),
+                                        pokeObj.getJSONObject("sprites").getJSONObject("other")
+                                            .getJSONObject("home").getString("front_default"),
+                                        Stats(
+                                            statsArr.getJSONObject(si++).getInt("base_stat")
+                                                .toString(),
+                                            statsArr.getJSONObject(si++).getInt("base_stat")
+                                                .toString(),
+                                            statsArr.getJSONObject(si++).getInt("base_stat")
+                                                .toString(),
+                                            statsArr.getJSONObject(si++).getInt("base_stat")
+                                                .toString(),
+                                            statsArr.getJSONObject(si++).getInt("base_stat")
+                                                .toString(),
+                                            statsArr.getJSONObject(si).getInt("base_stat")
+                                                .toString()
+                                        )
+                                    )
+                                    GlobalScope.launch { pokeDB.pkmnDao().storePokemon(pkmn) }
+//                                    pokemonsList.add(pkmn)
+                                    vm.addPkmn(pkmn)
+                                }
+
+                            },
+                            Response.ErrorListener {
+
+                            }) {
+
                     }
-                    pokeTypeData.add(
-                        TypesData(
-                            it.getInt("id"),
-                            it.getString("name"),adL,ddL,ndL
-                        )
-                    )
-                },
-                    Response.ErrorListener {
-                        println("type fetching error")
-                    }){}
-            typeQueue.add(reqTypes)
-        }
-            for(i in 1 until APIs.MOVE_LIMIT){
-                val reqTypes = object :
-                    JsonObjectRequest(Request.Method.GET, APIs.Moves_API + "$i", null, Response.Listener { jsonObject ->
-                        println(" $i move fetching succeed")
-                        val kind =  jsonObject.getJSONObject("damage_class").getString("name")
-                        var power : Int
-                        var acc : Int
-                        try {
-                            power = jsonObject.getInt("power")
-                        }catch (e : Exception){
-                            power = 0
-                        }
-                        try {
-                            acc = jsonObject.getInt("accuracy")
-                        }catch (e : Exception){
-                            acc = 0
-                        }
-                        try {
-                            pokeMoveData.add(
-                                MoveData(
-                                    jsonObject.getInt("id"),
-                                    jsonObject.getString("name"),
-                                    power,
-                                    acc,
-                                    jsonObject.getInt("pp"),
-                                    jsonObject.getJSONObject("type").getString("name"),kind
-                                )
-                            )
-                        }catch (e: Exception){
-                            println(e)
-                        }
-                    },
-                        Response.ErrorListener {
-                            println("move fetching error")
-                        }){}
-                movesQueue.add(reqTypes)
+                    queue.add(reqPkms)
+                }
+                /*dataSaved = true
+                sharedPreferences.edit().putBoolean("have_data", dataSaved).apply()*/
+            }else{
+                pokedataSaved = true
+                sharedPreferences.edit().putBoolean("have_pokedata", pokedataSaved).apply()
+                supportFragmentManager.beginTransaction().replace(R.id.pokeList_container, DashboardFragment()).commit()
+
             }
-       }
+            if (pokeDB.typeDao().isUpToDate() < APIs.LAST_TYPE - 1) {
+                for (i in 1 until APIs.LAST_TYPE) {
+                    val reqTypes = object :
+                        JsonObjectRequest(Request.Method.GET,
+                            APIs.TYPES_API + "$i",
+                            null,
+                            Response.Listener {
+                                println(" $i type fetching succeed")
+                                val ad = it.getJSONObject("damage_relations")
+                                    .getJSONArray("double_damage_from")
+                                val adL = mutableListOf<String>()
+                                val dd = it.getJSONObject("damage_relations")
+                                    .getJSONArray("half_damage_from")
+                                val ddL = mutableListOf<String>()
+                                val nd =
+                                    it.getJSONObject("damage_relations")
+                                        .getJSONArray("no_damage_from")
+                                val ndL = mutableListOf<String>()
+                                var x = 0
+                                var y = 0
+                                var z = 0
+                                while (x < ad.length() || y < dd.length() || z < nd.length()) {
+                                    if (x < ad.length()) {
+                                        ddL.add(ad.getJSONObject(x).getString("name"))
+                                        x++
+                                    }
+                                    if (y < dd.length()) {
+                                        adL.add(dd.getJSONObject(y).getString("name"))
+                                        y++
+                                    }
+                                    if (z < nd.length()) {
+                                        ndL.add(nd.getJSONObject(z).getString("name"))
+                                        z++
+                                    }
+                                }
+                                val type = TypesData(
+                                    it.getInt("id"),
+                                    it.getString("name"), adL, ddL, ndL
+                                )
+                                GlobalScope.launch {
+                                    pokeDB.typeDao().storeType(type)
+                                }
+                                pokeTypeData.add(type)
+                            },
+                            Response.ErrorListener {
+                                println("type fetching error")
+                            }) {}
+                    typeQueue.add(reqTypes)
+                }
+            }else{
+                typedataSaved = true
+                sharedPreferences.edit().putBoolean("have_typedata", typedataSaved).apply()
+            }
+            if ( pokeDB.moveDao().isUpToDate() < APIs.MOVE_LIMIT - 1) {
+                for (i in 1 until APIs.MOVE_LIMIT) {
+                    val reqTypes = object :
+                        JsonObjectRequest(Request.Method.GET,
+                            APIs.Moves_API + "$i",
+                            null,
+                            Response.Listener { jsonObject ->
+                                println(" $i move fetching succeed")
+                                val kind =
+                                    jsonObject.getJSONObject("damage_class").getString("name")
+                                var power: Int
+                                var acc: Int
+                                try {
+                                    power = jsonObject.getInt("power")
+                                } catch (e: Exception) {
+                                    power = 0
+                                }
+                                try {
+                                    acc = jsonObject.getInt("accuracy")
+                                } catch (e: Exception) {
+                                    acc = 0
+                                }
+                                try {
+
+                                    val move = MoveData(
+                                        jsonObject.getInt("id"),
+                                        jsonObject.getString("name"),
+                                        power,
+                                        acc,
+                                        jsonObject.getInt("pp"),
+                                        jsonObject.getJSONObject("type").getString("name"), kind
+                                    )
+                                    GlobalScope.launch {
+                                        pokeDB.moveDao().storeMove(move)
+                                    }
+                                    pokeMoveData.add(move)
+                                } catch (e: Exception) {
+                                    println("OCUURED : $e")
+                                }
+                            },
+                            Response.ErrorListener {
+                                println("move fetching error")
+                            }) {}
+                    movesQueue.add(reqTypes)
+                }
+            }else{
+                movedataSaved = true
+                sharedPreferences.edit().putBoolean("have_movedata", movedataSaved).apply()
+            }
+        }
+        if(typedataSaved) {
+            pokeDB.typeDao().getAllTypes().observe(this, androidx.lifecycle.Observer {
+                pokeTypeData.addAll(it)
+            })
+        }
+        if(pokedataSaved) {
+            // GETTING DATA FROM LOCAL DATABASE(ROOM)
+            pokeDB.pkmnDao().getAllPokemon().observe(this, androidx.lifecycle.Observer {
+//                pokemonsList.addAll(it)
+                vm.addallPkmn(it)
+            })
+        }
+        if(movedataSaved) {
+            pokeDB.moveDao().getAllMoves().observe(this, androidx.lifecycle.Observer {
+                pokeMoveData.addAll(it)
+            })
+        }
 
         Handler().postDelayed({
+
             binding.imageView2.visibility = GONE
             binding.pokeListContainer.background = null
+//            pokemonsList.removeFirst()            // DEPRECATED
             supportFragmentManager.beginTransaction().replace(R.id.pokeList_container, DashboardFragment()).commit()
-        },5000)
+        },3500)
 
         binding.button.setOnClickListener {
            supportFragmentManager.beginTransaction().replace(R.id.pokeList_container, DashboardFragment()).commit()

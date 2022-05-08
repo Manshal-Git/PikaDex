@@ -7,10 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
-import com.manshal_khatri.pikadex.DescriptionActivity
 import com.manshal_khatri.pikadex.R
 import com.manshal_khatri.pikadex.pokeTypeData
 import com.manshal_khatri.pikadex.pokemon
+import com.manshal_khatri.pikadex.util.TypeResourseSetter
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -30,6 +30,7 @@ class TypeFragment : Fragment() {
     lateinit var layoutDisAd2x : LinearLayout
     lateinit var layoutAd4x : LinearLayout
     lateinit var layoutDisAd4x : LinearLayout
+    lateinit var resourseSetter: TypeResourseSetter
 //      var types : Types = Types("bug","ice")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,6 +46,7 @@ class TypeFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_type, container, false)
+        resourseSetter = TypeResourseSetter()
         layoutAd2x = view.findViewById(R.id.adItemContainer2x)
         layoutDisAd2x= view.findViewById(R.id.disItemContainer2x)
         layoutAd4x = view.findViewById(R.id.adItemContainer4x)
@@ -94,6 +96,7 @@ class TypeFragment : Fragment() {
         return view
     }
 
+    // WORKS WITH LIST
     fun setupTVs1(list: List<String>, parentLayout: LinearLayout){
             val x =LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT,)
             if(list.isNotEmpty()){
@@ -106,7 +109,8 @@ class TypeFragment : Fragment() {
                         x.setMargins(4,0,4,0)
                         layoutParams = x
                     }
-                    DescriptionActivity().setTypeTextcolor( list.elementAt(element),newTV)
+//                    DescriptionActivity().setTypeTextcolor( list.elementAt(element),newTV)
+                    newTV.setBackgroundResource(resourseSetter.setTypecolor(list.elementAt(element)))
                     parentLayout.addView(newTV)
                 }
             }else{
@@ -122,6 +126,7 @@ class TypeFragment : Fragment() {
             }
 
     }
+    // WORKS WITH SET
     fun setupTVs2(list: Set<String>, parentLayout: LinearLayout){
         val x =LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT,)
         if(list.isNotEmpty()) {
@@ -134,7 +139,8 @@ class TypeFragment : Fragment() {
                     x.setMargins(4, 0, 4, 0)
                     layoutParams = x
                 }
-                DescriptionActivity().setTypeTextcolor(list.elementAt(element), newTV)
+//                DescriptionActivity().setTypeTextcolor(list.elementAt(element), newTV)
+                newTV.setBackgroundResource(resourseSetter.setTypecolor(list.elementAt(element)))
                 parentLayout.addView(newTV)
             }
         } else{

@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.manshal_khatri.pikadex.R
 
-class InfoFragment : Fragment() {
+class GenericInfoFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

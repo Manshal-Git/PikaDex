@@ -1,20 +1,17 @@
-package com.manshal_khatri.pikadex.util
+package com.manshal_khatri.pikadex.adapters
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.content.res.AppCompatResources.getDrawable
 import androidx.recyclerview.widget.RecyclerView
 import com.manshal_khatri.pikadex.R
 import com.manshal_khatri.pikadex.databinding.MoveCardBinding
-import com.manshal_khatri.pikadex.model.MoveData
 import com.manshal_khatri.pikadex.model.Moves
 import com.manshal_khatri.pikadex.pokeMoveData
 import com.squareup.picasso.Picasso
 
-class MovesAdapter(val moves : List<Moves> ) : RecyclerView.Adapter<MovesAdapter.ViewHolder>()  {
+class MovesAdapter(private val moves : List<Moves> ) : RecyclerView.Adapter<MovesAdapter.ViewHolder>()  {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovesAdapter.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
             MoveCardBinding.inflate(
                 LayoutInflater.from(parent.context),parent,false
@@ -22,7 +19,7 @@ class MovesAdapter(val moves : List<Moves> ) : RecyclerView.Adapter<MovesAdapter
         )
     }
 
-    override fun onBindViewHolder(holder: MovesAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val move = moves[position]
         val moveData = pokeMoveData.find { move.name == it.name }
         with(holder){

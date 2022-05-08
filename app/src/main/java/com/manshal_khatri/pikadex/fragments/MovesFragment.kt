@@ -10,7 +10,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.manshal_khatri.pikadex.R
 import com.manshal_khatri.pikadex.pokeMoveData
 import com.manshal_khatri.pikadex.pokeMoves
-import com.manshal_khatri.pikadex.util.MovesAdapter
+import com.manshal_khatri.pikadex.adapters.MovesAdapter
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.isActive
 
 class MovesFragment : Fragment() {
 

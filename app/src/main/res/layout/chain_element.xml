@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:gravity="center">
+
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@drawable/round_base"
+        android:layout_margin="10dp"
+        android:rotationX="80"
+        android:translationY="42dp"
+        android:translationX="-8dp"
+        />
+
+    <ImageView
+        android:id="@+id/PokeSprite"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_margin="8dp"/>
+
+</RelativeLayout>
