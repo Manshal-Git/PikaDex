@@ -16,7 +16,7 @@
         />
 
     <ImageView
-        android:id="@+id/PokeSprite"
+        android:id="@+id/IVPokeSprite"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_margin="8dp"/>

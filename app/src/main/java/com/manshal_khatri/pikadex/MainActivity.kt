@@ -65,6 +65,9 @@ class MainActivity : AppCompatActivity() {
         pokedataSaved = sharedPreferences.getBoolean("have_pokedata",pokedataSaved)
         typedataSaved = sharedPreferences.getBoolean("have_typedata",typedataSaved)
         movedataSaved = sharedPreferences.getBoolean("have_movedata",movedataSaved)
+        vm.clearAllPkmn()
+        pokeMoveData.clear()  // Not efficient Should be using viewmodel
+        pokeTypeData.clear()
 //        gd = GestureDetector(this,this)
 
         GlobalScope.launch {

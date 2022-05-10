@@ -1,15 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<androidx.appcompat.widget.LinearLayoutCompat
+    android:id="@+id/parentLinearLayout"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:paddingHorizontal="4dp"
+    android:paddingVertical="8dp"
+    android:layout_gravity="center"
     tools:context=".fragments.EvolutionChainFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/RVEvolutionChain"
+        android:layout_width="wrap_content"
+        android:layout_height="120dp" />
 
-</FrameLayout>
+  <!--  <de.blox.treeview.TreeView
+        android:id="@+id/TVEvolutionChain"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>-->
+
+
+
+</androidx.appcompat.widget.LinearLayoutCompat>

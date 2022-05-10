@@ -8,5 +8,6 @@ object APIs {
     const val PKMN_API = "https://pokeapi.co/api/v2/pokemon/"
     const val TYPES_API = "https://pokeapi.co/api/v2/type/"
     const val  Moves_API = "https://pokeapi.co/api/v2/move/"
+    const val SPECIES_API = "https://pokeapi.co/api/v2/pokemon-species/"
 
 }

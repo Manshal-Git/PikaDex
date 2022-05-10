@@ -37,6 +37,34 @@
             app:layout_constraintStart_toStartOf="parent"
             tools:layout="@layout/fragment_type" />
 
+            <View
+                android:id="@+id/divider2"
+                android:layout_marginVertical="4dp"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="?android:attr/listDivider"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Evolution Chain"
+                android:layout_marginStart="8dp"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:textColor="@color/black"/>
+            <androidx.fragment.app.FragmentContainerView
+                android:layout_marginVertical="8dp"
+                android:id="@+id/fragmentContainerView3"
+                android:name="com.manshal_khatri.pikadex.fragments.EvolutionChainFragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:layout="@layout/fragment_evolution_chain" />
+
+
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>

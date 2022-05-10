@@ -49,7 +49,7 @@
             motion:layout_constraintBottom_toBottomOf="@id/PokeSprite" >
             <CustomAttribute
                 motion:attributeName="translationZ"
-                motion:customDimension="1dp" />
+                motion:customDimension="0dp" />
         </Constraint>
         <Constraint
             android:id="@+id/PokeSprite"
