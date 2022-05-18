@@ -6,8 +6,8 @@
     android:gravity="center">
 
     <ImageView
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
         android:src="@drawable/round_base"
         android:layout_margin="10dp"
         android:rotationX="80"
@@ -17,8 +17,11 @@
 
     <ImageView
         android:id="@+id/IVPokeSprite"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_margin="8dp"/>
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp" />
 
 </RelativeLayout>

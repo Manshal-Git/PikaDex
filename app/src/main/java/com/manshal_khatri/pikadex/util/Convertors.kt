@@ -1,9 +1,16 @@
 package com.manshal_khatri.pikadex.util
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.room.TypeConverter
 import androidx.room.TypeConverters
+import com.manshal_khatri.pikadex.model.EvolutionChainObj
 import com.manshal_khatri.pikadex.model.Stats
 import com.manshal_khatri.pikadex.model.PokeTypes
+import com.manshal_khatri.pikadex.model.Pokemons
+import java.lang.reflect.Array.get
+
 @TypeConverters
 class Convertors {
     @TypeConverter
@@ -53,12 +60,43 @@ class Convertors {
         }
         return list
     }
-   /* fun cutout(s:String,list : MutableList<String>):MutableList<String>{
-        if(s.length==0){
-            return list
+
+   /* @TypeConverter
+    fun arrayListToString(list : List<Any>):String{
+        var s = ""
+        var i =0
+        var ii = i.toString()
+        for(e in list){
+            if(e==i){
+                s+="$e"
+                i++
+                ii = i.toString()
+            }else{
+                s+="$e "
+            }
         }
-        list.add(s.substringBefore(" "))
-        cutout(s.substringAfter(" "),list)
-        return list
+        return s
+    }
+    @TypeConverter
+    fun stringToArrayList(s:String): List<Any> {
+        var sb = s
+        val list = mutableListOf<Any>()
+        var i = 0
+        var ii = i.toString()
+        list.add(i)
+        sb = sb.substringAfter(ii)
+        while(sb.length > 0){
+            i++
+            ii = i.toString()
+            var sc = sb.substringBefore(ii)
+            while(sc.length > 0){
+                list.add(sc.substringBefore(" "))
+                sc = sc.substringAfter(" ")
+            }
+            list.add(i)
+            sb = sb.substringAfter(ii)
+        }
+        return list //EvolutionChainObj("0/0",list)
     }*/
+
 }

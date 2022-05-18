@@ -1,6 +1,8 @@
 package com.manshal_khatri.pikadex.util
 
 import android.annotation.SuppressLint
+import androidx.core.content.res.ResourcesCompat.getColor
+import com.google.android.material.color.MaterialColors.getColor
 import com.manshal_khatri.pikadex.R
 
 class TypeResourseSetter {
@@ -50,5 +52,12 @@ class TypeResourseSetter {
             "dark" -> (R.drawable.dark_wp)
            else -> R.drawable.normal_wp
        }
+    }
+    fun setTypeTextColor(s: String) : Int {
+        return when (s) {
+            "flying" -> (R.color.black)
+            "normal" -> (R.color.black)
+            else -> R.color.white
+        }
     }
 }

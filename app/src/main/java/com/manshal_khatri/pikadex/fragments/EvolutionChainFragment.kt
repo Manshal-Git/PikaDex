@@ -1,8 +1,10 @@
 package com.manshal_khatri.pikadex.fragments
 
 import android.content.Context
+import android.nfc.Tag
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -17,11 +19,14 @@ import com.manshal_khatri.pikadex.adapters.EvolutionChainAdapter
 import com.manshal_khatri.pikadex.adapters.MyTreeAdapter
 import com.manshal_khatri.pikadex.adapters.TreeViewHolder
 import com.manshal_khatri.pikadex.databinding.FragmentEvolutionChainBinding
+import com.manshal_khatri.pikadex.evolutionChain
 import com.manshal_khatri.pikadex.pokemonsList
 import com.manshal_khatri.pikadex.viewmodel.PokemonViewmodel
 import com.squareup.picasso.Picasso
 import de.blox.treeview.BaseTreeAdapter
 import de.blox.treeview.TreeNode
+import kotlinx.coroutines.*
+import java.lang.Exception
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -54,18 +59,34 @@ class EvolutionChainFragment : Fragment() {
     ): View? {
        val view = inflater.inflate(R.layout.fragment_evolution_chain, container, false)
         binding = FragmentEvolutionChainBinding.bind(view)
-        val vm = ViewModelProvider(this).get(PokemonViewmodel::class.java)
+//        val vm = ViewModelProvider(this).get(PokemonViewmodel::class.java)
         binding.RVEvolutionChain.layoutManager = LinearLayoutManager(activity,RecyclerView.HORIZONTAL,false)
-        Handler().postDelayed({
-            binding.RVEvolutionChain.adapter = vm.vmEvolutionChain.value?.let {
-                EvolutionChainAdapter(
-                    it, requireActivity() as DescriptionActivity
-                )
+//        val reqList = removeNumbers()
+        fun setAdapter(){
+            try{
+//                vm.removeNumbers()
+            binding.RVEvolutionChain.adapter = EvolutionChainAdapter(
+                evolutionChain
+            )
+            }catch (e : Exception){
+                Log.d("Tag","Exception Catched : ",e)
             }
-        },3000)     // SHOULD BE ENHANCED
-
+        }
+        Handler().postDelayed({
+            setAdapter()
+        },3000)
+        Handler().postDelayed({
+          setAdapter()
+        },4000) // SHOULD BE ENHANCED
         return view
     }
+    /*fun removeNumbers():List<String>{
+        for(i in 0 until 3)
+            evolutionChain.remove(i.toString())
+
+        println("numbers removes $evolutionChain")
+        return evolutionChain
+    }*/
 
     companion object {
         /**

@@ -15,11 +15,20 @@ class PokemonViewmodel:ViewModel() {
     val vmEvolutionChain : LiveData<MutableList<String>>
     get() = _vmEvolutionChain
 
-    fun addToEvolutionChain(pkmnName : String){
-        _vmEvolutionChain.value?.add(pkmnName)
-        _vmEvolutionChain.value = _vmEvolutionChain.value
-    }
+    fun addToEvolutionChain(pkmnName : String) = _vmEvolutionChain.value?.add(pkmnName)
 
+    fun addCompleteChain(list : List<String>){
+        _vmEvolutionChain.value?.addAll(list)
+        _vmEvolutionChain.value = removeNumbers()!!
+        println("Adding")
+    }
+    fun removeNumbers():MutableList<String>?{
+        for(i in 0 until 3)
+        _vmEvolutionChain.value?.remove(i.toString())
+
+        println("numbers removes ${_vmEvolutionChain.value}")
+        return _vmEvolutionChain.value
+    }
     fun clearEvolutionChain() = _vmEvolutionChain.value?.clear()
 
     fun addPkmn(pkmn : Pokemons){

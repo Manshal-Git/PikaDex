@@ -39,7 +39,6 @@ class TypeFragment : Fragment() {
             param2 = it.getString(ARG_PARAM2)
         }
     }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -103,8 +102,10 @@ class TypeFragment : Fragment() {
                 for(element in list.indices){
                     val newTV = TextView(activity)
                     with(newTV){
-                        text = list.elementAt(element)
+                        val type = list.elementAt(element)
+                        text = type.replaceFirst(type.first(),type.first().uppercaseChar())
                         textSize = 18.0F
+                        setTextColor(resources.getColor(resourseSetter.setTypeTextColor(type)))
                         setPadding(24,0,24,0)
                         x.setMargins(4,0,4,0)
                         layoutParams = x
@@ -133,13 +134,14 @@ class TypeFragment : Fragment() {
             for (element in list.indices) {
                 val newTV = TextView(activity)
                 with(newTV) {
-                    text = list.elementAt(element)
+                    val type = list.elementAt(element)
+                    text = type.replaceFirst(type.first(),type.first().uppercaseChar())
                     textSize = 18.0F
+                    setTextColor(resources.getColor(resourseSetter.setTypeTextColor(type)))
                     setPadding(24, 0, 24, 0)
                     x.setMargins(4, 0, 4, 0)
                     layoutParams = x
                 }
-//                DescriptionActivity().setTypeTextcolor(list.elementAt(element), newTV)
                 newTV.setBackgroundResource(resourseSetter.setTypecolor(list.elementAt(element)))
                 parentLayout.addView(newTV)
             }
