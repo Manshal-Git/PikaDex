@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.transition.Transition
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import androidx.annotation.RequiresApi
@@ -15,6 +16,8 @@ import com.android.volley.RequestQueue
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.manshal_khatri.pikadex.adapters.MyTreeAdapter
 import com.manshal_khatri.pikadex.adapters.TreeViewHolder
 import com.manshal_khatri.pikadex.databinding.ActivityDescriptionBinding
@@ -80,28 +83,32 @@ class DescriptionActivity : AppCompatActivity() {
             }
         })
 
-      /*  if(vm.vmEvolutionChain.value?.isEmpty() == true){
-            val gf = GenericInfoFragment()
-            gf.getEvoChain(queue,pokeId,vm,pokeDB)
-        }*/
         if (intent!=null){
             pokemon = pokemonsList.find {  pokeId == it.id  }
             val tmpPk = pokemon!!
             if (pokemon != null) {
                 binding.pokeName.text = tmpPk.pokeName.replaceFirst(tmpPk.pokeName.first(),tmpPk.pokeName.first().uppercaseChar())
-                Picasso.get().load(tmpPk.spriteUrl).into(binding.PokeSprite)
+//                Picasso.get().load(tmpPk.spriteUrl).into(binding.PokeSprite)  //SHOULD BE DEPRECATED
+                Glide.with(this).load(tmpPk.spriteUrl)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(binding.PokeSprite)
                 binding.textView.text = tmpPk.id.toString()
+                val type1 = tmpPk.pokeType.type1
+                val type2 = tmpPk.pokeType.type2
                 if(tmpPk.pokeType.type2!=""){
-                    binding.type2.text = tmpPk.pokeType.type2
+                    binding.type2.text = type2.replaceFirst(type2.first(),type2.first().uppercaseChar())
+                    binding.type2.setTextColor(resources.getColor(colorSetter.setTypeTextColor(tmpPk.pokeType.type2)))
                     t2.propertySet.visibility = VISIBLE
-                    binding.type1.text = tmpPk.pokeType.type1
+                    binding.type1.text = type1.replaceFirst(type1.first(),type1.first().uppercaseChar())
+                    binding.type1.setTextColor(resources.getColor(colorSetter.setTypeTextColor(tmpPk.pokeType.type1)))
                     binding.type2.setBackgroundResource(colorSetter.setTypecolor(tmpPk.pokeType.type2))
                     tmpPk.pokeType.type1.let { binding.type1.setBackgroundResource(colorSetter.setTypecolor(it))
                         binding.imageView.setImageResource(colorSetter.setTypeBG(it))}
                 }else{
                     binding.type1.visibility= GONE
                     t1.propertySet.visibility = GONE
-                    binding.type2.text = tmpPk.pokeType.type1
+                    binding.type2.text = type1.replaceFirst(type1.first(),type1.first().uppercaseChar())
+                    binding.type2.setTextColor(resources.getColor(colorSetter.setTypeTextColor(tmpPk.pokeType.type1)))
                     tmpPk.pokeType.type1.let { binding.type2.setBackgroundResource(colorSetter.setTypecolor(it))
                         binding.imageView.setImageResource(colorSetter.setTypeBG(it))}
                 }
@@ -127,7 +134,7 @@ class DescriptionActivity : AppCompatActivity() {
         supportFragmentManager.beginTransaction().add(R.id.desc_frag_container,GenericInfoFragment()).commit()
 
     }
-    fun getMoves(queue : RequestQueue, pokeId : Int){
+    private fun getMoves(queue : RequestQueue, pokeId : Int){
         val request = object : JsonObjectRequest(Method.GET, APIs.PKMN_API+"$pokeId",null,Response.Listener {
             print("Api Response success $it")
              pokeMoves.clear()

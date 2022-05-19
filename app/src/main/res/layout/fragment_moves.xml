@@ -7,9 +7,83 @@
     tools:context=".fragments.MovesFragment"
     android:background="@color/white">
 
-    <!-- TODO: Update blank fragment layout -->
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/TitleBar"
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:weightSum="12"
+        android:gravity="center"
+        >
+
+        <TextView
+            android:layout_weight="1"
+            android:id="@+id/lvl"
+            android:layout_width="20dp"
+            android:layout_height="wrap_content"
+            android:text="Lvl"
+            android:gravity="center"
+            />
+
+        <TextView
+            android:layout_weight="2.5"
+            android:id="@+id/moveName"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Name"/>
+
+        <TextView
+            android:id="@+id/type"
+            android:layout_weight="2"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:text="Type"
+            android:paddingVertical="2dp"
+            android:gravity="center"/>
+
+        <TextView
+            android:layout_weight="2"
+            android:id="@+id/movePower"
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Power"/>
+
+        <TextView
+            android:layout_weight="1.5"
+            android:id="@+id/moveAccuracy"
+            android:layout_width="25dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Acc"/>
+        <TextView
+            android:layout_weight="1"
+            android:id="@+id/movePP"
+            android:layout_width="20dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="PP"/>
+
+        <RelativeLayout
+            android:layout_weight="2"
+            android:layout_width="32dp"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_alignParentEnd="true"
+                android:id="@+id/moveKind"
+                android:layout_width="50dp"
+                android:layout_height="32dp"
+                android:layout_margin="2dp"
+                android:text="Class"
+                android:gravity="center"
+                />
+        </RelativeLayout>
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
 
     <androidx.recyclerview.widget.RecyclerView
+        android:layout_below="@+id/TitleBar"
         android:id="@+id/moveListRV"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>

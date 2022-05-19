@@ -1,6 +1,7 @@
 package com.manshal_khatri.pikadex.fragments
 
 import android.content.Context
+import android.content.Intent
 import android.nfc.Tag
 import android.os.Bundle
 import android.os.Handler
@@ -62,16 +63,7 @@ class EvolutionChainFragment : Fragment() {
 //        val vm = ViewModelProvider(this).get(PokemonViewmodel::class.java)
         binding.RVEvolutionChain.layoutManager = LinearLayoutManager(activity,RecyclerView.HORIZONTAL,false)
 //        val reqList = removeNumbers()
-        fun setAdapter(){
-            try{
-//                vm.removeNumbers()
-            binding.RVEvolutionChain.adapter = EvolutionChainAdapter(
-                evolutionChain
-            )
-            }catch (e : Exception){
-                Log.d("Tag","Exception Catched : ",e)
-            }
-        }
+
         Handler().postDelayed({
             setAdapter()
         },3000)
@@ -79,6 +71,21 @@ class EvolutionChainFragment : Fragment() {
           setAdapter()
         },4000) // SHOULD BE ENHANCED
         return view
+    }
+    fun setAdapter(){
+        try{
+//                vm.removeNumbers()
+            binding.RVEvolutionChain.adapter = activity?.let {
+                EvolutionChainAdapter(
+                    evolutionChain, it
+                )
+            }
+        }catch (e : Exception){
+            Log.d("Tag","Exception Catched : ",e)
+        }
+    }
+    fun seePokemon(pokeId : Int){
+        startActivity(Intent(activity,DescriptionActivity::class.java).putExtra("id",pokeId))
     }
     /*fun removeNumbers():List<String>{
         for(i in 0 until 3)
@@ -88,6 +95,10 @@ class EvolutionChainFragment : Fragment() {
         return evolutionChain
     }*/
 
+    override fun onResume() {
+        setAdapter()
+        super.onResume()
+    }
     companion object {
         /**
          * Use this factory method to create a new instance of

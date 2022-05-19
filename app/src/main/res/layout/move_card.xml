@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="36dp"
-    android:layout_marginVertical="5dp"
+    android:layout_marginVertical="4dp"
     android:weightSum="12"
     android:gravity="center"
     >
@@ -11,7 +11,7 @@
     <TextView
         android:layout_weight="1"
         android:id="@+id/lvl"
-        android:layout_width="wrap_content"
+        android:layout_width="20dp"
         android:layout_height="wrap_content"
         android:text="10"
         android:gravity="center"
@@ -20,7 +20,7 @@
     <TextView
         android:layout_weight="2.5"
         android:id="@+id/moveName"
-        android:layout_width="wrap_content"
+        android:layout_width="70dp"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="Double-slap"/>
@@ -28,15 +28,16 @@
     <TextView
         android:id="@+id/type"
         android:layout_weight="2"
-        android:layout_width="wrap_content"
+        android:layout_width="50dp"
         android:layout_height="wrap_content"
         android:text="Psychic"
+        android:paddingVertical="2dp"
         android:gravity="center"/>
 
     <TextView
         android:layout_weight="2"
         android:id="@+id/movePower"
-        android:layout_width="wrap_content"
+        android:layout_width="30dp"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="110"/>
@@ -44,14 +45,14 @@
     <TextView
         android:layout_weight="1.5"
         android:id="@+id/moveAccuracy"
-        android:layout_width="wrap_content"
+        android:layout_width="25dp"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="10"/>
     <TextView
         android:layout_weight="1"
         android:id="@+id/movePP"
-        android:layout_width="wrap_content"
+        android:layout_width="20dp"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="10"/>
@@ -67,8 +68,8 @@
             android:layout_width="50dp"
             android:layout_height="32dp"
             android:layout_margin="2dp"
-
-            android:src="@drawable/fire_wp"/>
+            android:src="@drawable/fire_wp"
+             />
     </RelativeLayout>
 
     </androidx.appcompat.widget.LinearLayoutCompat>

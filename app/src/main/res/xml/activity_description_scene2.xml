@@ -27,16 +27,14 @@
             android:layout_width="wrap_content"
             motion:layout_constraintVertical_bias="0.842"
             motion:layout_constraintStart_toStartOf="parent"
-            android:layout_marginLeft="16dp"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="12dp"
             android:id="@+id/type2" />
 
         <Constraint
             android:id="@+id/imageView"
             android:layout_width="390dp"
             android:layout_height="260dp"
-            motion:layout_constraintTop_toTopOf="parent"
-            motion:layout_editor_absoluteX="1dp">
+            motion:layout_constraintTop_toTopOf="parent">
             <CustomAttribute
                 motion:attributeName="translationZ" />
         </Constraint>
@@ -75,13 +73,13 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="84dp"
             motion:layout_constraintTop_toTopOf="@+id/PokeSprite"
-            motion:layout_constraintHorizontal_bias="0.166"
+            motion:layout_constraintHorizontal_bias="0.200"
             android:layout_width="wrap_content"
-            motion:layout_constraintEnd_toStartOf="@+id/PokeSprite"
+
             motion:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="12dp"
             android:id="@+id/type1"
-            android:visibility="gone" />
+            android:visibility="visible" />
         <Constraint
             android:layout_height="wrap_content"
             motion:layout_constraintTop_toTopOf="parent"

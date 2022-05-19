@@ -7,6 +7,7 @@ import android.view.GestureDetector
 import android.view.Menu
 import android.view.View.GONE
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.android.volley.Request
 import com.android.volley.Response
@@ -54,7 +55,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         sharedPreferences = getSharedPreferences("pokeDB", MODE_PRIVATE)
-        Glide.with(this).load(R.drawable.pikantro).into(binding.imageView2)
+        Glide.with(this).load(R.drawable.pikantro).into(binding.IVPikaIntro)
         val queue = Volley.newRequestQueue(this)
         val typeQueue = Volley.newRequestQueue(this)
         val movesQueue = Volley.newRequestQueue(this)
@@ -75,7 +76,7 @@ class MainActivity : AppCompatActivity() {
                 for (i in start until APIs.LAST_POKEMON) {
                     val reqPkms = object :
                         JsonObjectRequest(
-                            Request.Method.GET,
+                            Method.GET,
                             APIs.PKMN_API + "$i",
                             null,
                             Response.Listener {
@@ -171,7 +172,8 @@ class MainActivity : AppCompatActivity() {
             if (pokeDB.typeDao().isUpToDate() < APIs.LAST_TYPE - 1) {
                 for (i in 1 until APIs.LAST_TYPE) {
                     val reqTypes = object :
-                        JsonObjectRequest(Request.Method.GET,
+                        JsonObjectRequest(
+                            Method.GET,
                             APIs.TYPES_API + "$i",
                             null,
                             Response.Listener {
@@ -224,7 +226,8 @@ class MainActivity : AppCompatActivity() {
             if ( pokeDB.moveDao().isUpToDate() < APIs.MOVE_LIMIT - 1) {
                 for (i in 1 until APIs.MOVE_LIMIT) {
                     val reqTypes = object :
-                        JsonObjectRequest(Request.Method.GET,
+                        JsonObjectRequest(
+                            Method.GET,
                             APIs.Moves_API + "$i",
                             null,
                             Response.Listener { jsonObject ->
@@ -272,26 +275,26 @@ class MainActivity : AppCompatActivity() {
             }
         }
         if(typedataSaved) {
-            pokeDB.typeDao().getAllTypes().observe(this, androidx.lifecycle.Observer {
+            pokeDB.typeDao().getAllTypes().observe(this, Observer {
                 pokeTypeData.addAll(it)
             })
         }
         if(pokedataSaved) {
             // GETTING DATA FROM LOCAL DATABASE(ROOM)
-            pokeDB.pkmnDao().getAllPokemon().observe(this, androidx.lifecycle.Observer {
+            pokeDB.pkmnDao().getAllPokemon().observe(this, Observer {
 //                pokemonsList.addAll(it)
                 vm.addallPkmn(it)
             })
         }
         if(movedataSaved) {
-            pokeDB.moveDao().getAllMoves().observe(this, androidx.lifecycle.Observer {
+            pokeDB.moveDao().getAllMoves().observe(this, Observer {
                 pokeMoveData.addAll(it)
             })
         }
 
         Handler().postDelayed({
 
-            binding.imageView2.visibility = GONE
+            binding.IVPikaIntro.visibility = GONE
             binding.pokeListContainer.background = null
 //            pokemonsList.removeFirst()            // DEPRECATED
             supportFragmentManager.beginTransaction().replace(R.id.pokeList_container, DashboardFragment()).commit()

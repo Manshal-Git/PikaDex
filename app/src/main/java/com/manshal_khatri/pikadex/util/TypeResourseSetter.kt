@@ -60,4 +60,7 @@ class TypeResourseSetter {
             else -> R.color.white
         }
     }
+    fun capitalize(s: String) : String{
+        return s.replaceFirst(s.first(),s.first().uppercaseChar())
+    }
 }
