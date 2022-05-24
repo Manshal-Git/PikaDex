@@ -57,6 +57,8 @@ class TypeResourseSetter {
         return when (s) {
             "flying" -> (R.color.black)
             "normal" -> (R.color.black)
+            "psychic" -> R.color.black
+            "ice" -> R.color.ruff_black
             else -> R.color.white
         }
     }

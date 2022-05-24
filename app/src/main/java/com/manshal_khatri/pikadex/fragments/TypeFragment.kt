@@ -110,7 +110,6 @@ class TypeFragment : Fragment() {
                         x.setMargins(4,0,4,0)
                         layoutParams = x
                     }
-//                    DescriptionActivity().setTypeTextcolor( list.elementAt(element),newTV)
                     newTV.setBackgroundResource(resourseSetter.setTypecolor(list.elementAt(element)))
                     parentLayout.addView(newTV)
                 }

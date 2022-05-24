@@ -79,7 +79,7 @@
             motion:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="12dp"
             android:id="@+id/type1"
-            android:visibility="visible" />
+            android:visibility="gone" />
         <Constraint
             android:layout_height="wrap_content"
             motion:layout_constraintTop_toTopOf="parent"

@@ -132,7 +132,6 @@ class DescriptionActivity : AppCompatActivity() {
         }
 
         supportFragmentManager.beginTransaction().add(R.id.desc_frag_container,GenericInfoFragment()).commit()
-
     }
     private fun getMoves(queue : RequestQueue, pokeId : Int){
         val request = object : JsonObjectRequest(Method.GET, APIs.PKMN_API+"$pokeId",null,Response.Listener {

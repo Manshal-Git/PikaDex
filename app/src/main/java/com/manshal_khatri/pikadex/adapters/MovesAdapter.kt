@@ -1,5 +1,6 @@
 package com.manshal_khatri.pikadex.adapters
 
+import android.graphics.drawable.TransitionDrawable
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentActivity
@@ -26,7 +27,7 @@ class MovesAdapter(private val moves : List<Moves> ,val activity : FragmentActiv
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val move = moves[position]
         val moveData = pokeMoveData.find { move.name == it.name }
-        println(move)
+        println(moveData)
         with(holder){
             lvl.text = move.learningLvl.toString()
             movename.text = colorSetter.capitalize(move.name)
@@ -42,9 +43,9 @@ class MovesAdapter(private val moves : List<Moves> ,val activity : FragmentActiv
                accuracy.text = if(moveData.accuracy==0) "-" else moveData.accuracy.toString()
                pp.text = moveData.pp.toString()
                when(moveData.kind){
-                   "physical" -> Picasso.get().load(R.drawable.fire_wp).into(kind)
-                   "special" -> Picasso.get().load(R.drawable.water_wp).into(kind)
-                   "state" -> kind.setImageResource(R.drawable.flying_wp)
+                 /*  "physical" ->Glide.with(activity).load(R.drawable.fairy_wp).into(kind)
+                   "special" -> Glide.with(activity).load(R.drawable.fairy_wp).into(kind)
+                   "status" -> Glide.with(activity).load(R.drawable.fairy_wp).into(kind)*/
                }
                /*if(moveData.kind == "physical"){
                    Picasso.get().load(R.drawable.fire_wp).into(kind)

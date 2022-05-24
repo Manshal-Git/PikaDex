@@ -10,17 +10,18 @@ import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.manshal_khatri.pikadex.DescriptionActivity
 import com.manshal_khatri.pikadex.databinding.FragmentCardBinding
 import com.manshal_khatri.pikadex.model.Pokemons
 import com.manshal_khatri.pikadex.util.TypeResourseSetter
 
 
-class MyCardRecyclerViewAdapter(
+class PkmnRVAdapter(
      val values: List<Pokemons> ,view : View
-) : RecyclerView.Adapter<MyCardRecyclerViewAdapter.ViewHolder>() {
+) : RecyclerView.Adapter<PkmnRVAdapter.ViewHolder>() {
     val v = view
-    val colorSetter = TypeResourseSetter()
+    private val viewFormatter = TypeResourseSetter()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
 
         return ViewHolder(
@@ -40,19 +41,19 @@ class MyCardRecyclerViewAdapter(
             intent.putExtra("id",item.id)
             it.context.startActivity(intent)
         }
-        holder.pokeName.text =  item.pokeName
-        holder.pokeType1.text = item.pokeType.type1
-        holder.pokeType1.setBackgroundResource(colorSetter.setTypecolor(item.pokeType.type1))
+        holder.pokeName.text =  viewFormatter.capitalize(item.pokeName)
+        holder.pokeType1.text = viewFormatter.capitalize(item.pokeType.type1)
+        holder.pokeType1.setTextColor(v.resources.getColor(viewFormatter.setTypeTextColor(item.pokeType.type1)))
+        holder.pokeType1.setBackgroundResource(viewFormatter.setTypecolor(item.pokeType.type1))
         if(item.pokeType.type2!=""){
-            holder.pokeType2.text = item.pokeType.type2
-            holder.pokeType2.setBackgroundResource(colorSetter.setTypecolor(item.pokeType.type2))
+            holder.pokeType2.text = viewFormatter.capitalize(item.pokeType.type2)
+            holder.pokeType2.setTextColor(v.resources.getColor(viewFormatter.setTypeTextColor(item.pokeType.type2)))
+            holder.pokeType2.setBackgroundResource(viewFormatter.setTypecolor(item.pokeType.type2))
             holder.pokeType2.visibility = VISIBLE
         }else{
             holder.pokeType2.visibility = GONE
         }
-
-        Glide.with(v).load(item.spriteUrl).into(holder.pokeSprite)
-       // Picasso.get().load(item.spriteUrl).into(holder.pokeSprite)
+        Glide.with(v).load(item.spriteUrl).diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.pokeSprite)
     }
 
 
