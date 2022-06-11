@@ -161,8 +161,6 @@ class MainActivity : AppCompatActivity() {
                     }
                     queue.add(reqPkms)
                 }
-                /*dataSaved = true
-                sharedPreferences.edit().putBoolean("have_data", dataSaved).apply()*/
             }else{
                 pokedataSaved = true
                 sharedPreferences.edit().putBoolean("have_pokedata", pokedataSaved).apply()
@@ -300,9 +298,7 @@ class MainActivity : AppCompatActivity() {
             supportFragmentManager.beginTransaction().replace(R.id.pokeList_container, DashboardFragment()).commit()
         },3500)
 
-        binding.button.setOnClickListener {
-           supportFragmentManager.beginTransaction().replace(R.id.pokeList_container, DashboardFragment()).commit()
-        }
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

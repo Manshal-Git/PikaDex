@@ -12,6 +12,7 @@
         android:layout_height="wrap_content"
         android:theme="@style/Theme.PikaDex.AppBarOverlay">
 
+
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
@@ -19,6 +20,14 @@
             app:title="@string/title"
             android:background="?attr/colorPrimary"
             app:popupTheme="@style/Theme.PikaDex.PopupOverlay">
+
+            <androidx.appcompat.widget.SearchView
+                android:id="@+id/searchBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:visibility="gone"
+                />
             <TextView
                 android:id="@+id/counter"
                 android:layout_width="wrap_content"
@@ -53,7 +62,17 @@
             android:layout_marginTop="56dp"
             />
 
-
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/btnSearch"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:src="@drawable/ic_find"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp" />
     </RelativeLayout>
 
 

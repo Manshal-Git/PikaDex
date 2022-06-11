@@ -63,13 +63,15 @@
         android:layout_height="match_parent">
 
         <ImageView
-            android:layout_alignParentEnd="true"
             android:id="@+id/moveKind"
             android:layout_width="50dp"
             android:layout_height="32dp"
-            android:layout_margin="2dp"
-            android:src="@drawable/into_back"
-             />
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="2dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginEnd="2dp"
+            android:layout_marginBottom="2dp"
+            android:src="@drawable/ic_special_attack" />
     </RelativeLayout>
 
     </androidx.appcompat.widget.LinearLayoutCompat>

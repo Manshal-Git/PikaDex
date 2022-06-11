@@ -1,8 +1,10 @@
 package com.manshal_khatri.pikadex.adapters
 
 import android.graphics.drawable.TransitionDrawable
+import android.os.Build
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -24,6 +26,7 @@ class MovesAdapter(private val moves : List<Moves> ,val activity : FragmentActiv
         )
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val move = moves[position]
         val moveData = pokeMoveData.find { move.name == it.name }
@@ -43,17 +46,11 @@ class MovesAdapter(private val moves : List<Moves> ,val activity : FragmentActiv
                accuracy.text = if(moveData.accuracy==0) "-" else moveData.accuracy.toString()
                pp.text = moveData.pp.toString()
                when(moveData.kind){
-                 /*  "physical" ->Glide.with(activity).load(R.drawable.fairy_wp).into(kind)
-                   "special" -> Glide.with(activity).load(R.drawable.fairy_wp).into(kind)
-                   "status" -> Glide.with(activity).load(R.drawable.fairy_wp).into(kind)*/
+                   "physical" ->Glide.with(activity).load(R.drawable.ic_physical_attack).into(kind)
+                   "special" -> Glide.with(activity).load(R.drawable.ic_special_attack).into(kind)
+                   "status" -> Glide.with(activity).load(R.drawable.ic_stat_attack).into(kind)
                }
-               /*if(moveData.kind == "physical"){
-                   Picasso.get().load(R.drawable.fire_wp).into(kind)
-               }else if(moveData.kind == "special"){
-                   Picasso.get().load(R.drawable.water_wp).into(kind)
-               }else{
-                   Picasso.get().load(R.drawable.flying_wp).into(kind)
-               }*/
+               kind.tooltipText=moveData.kind
            }
         }
     }
