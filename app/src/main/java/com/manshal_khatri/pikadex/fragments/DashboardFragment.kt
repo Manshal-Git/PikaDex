@@ -1,12 +1,14 @@
 package com.manshal_khatri.pikadex.fragments
 
 import android.os.Bundle
+import android.os.Handler
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import android.widget.SearchView
 import android.widget.TextView
 import android.widget.Toast
@@ -35,6 +37,10 @@ class DashboardFragment : Fragment() {
         // Inflate the layout for this fragment
 
         val view = inflater.inflate(R.layout.fragment_dashboard, container, false)
+        Handler().postDelayed({
+            val layout = view.findViewById<FrameLayout>(R.id.frameLayoutDashboard)
+            layout.visibility = VISIBLE
+        },1000)
         c = view.findViewById(R.id.counter)
         list = view.findViewById(R.id.list)
         btnSearch = view.findViewById(R.id.btnSearch)

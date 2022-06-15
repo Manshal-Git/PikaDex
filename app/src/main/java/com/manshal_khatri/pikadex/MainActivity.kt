@@ -1,15 +1,21 @@
 package com.manshal_khatri.pikadex
 
 import android.content.SharedPreferences
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.view.GestureDetector
 import android.view.Menu
+import android.view.View
 import android.view.View.GONE
+import android.view.View.VISIBLE
+import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.android.volley.Request
+import androidx.lifecycle.lifecycleScope
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
@@ -20,8 +26,9 @@ import com.manshal_khatri.pikadex.model.*
 import com.manshal_khatri.pikadex.room.RoomDB
 import com.manshal_khatri.pikadex.util.APIs
 import com.manshal_khatri.pikadex.viewmodel.PokemonViewmodel
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers.Main
+
 
 val pokeApi = APIs.PKMN_API
 val pokemonsList = mutableListOf<Pokemons>()                                 // PKMNS
@@ -40,20 +47,43 @@ class MainActivity : AppCompatActivity() {
     companion object{
         const val TH = 200
     }
-   // private lateinit var appBarConfiguration: AppBarConfiguration
-    private lateinit var binding: ActivityMainBinding
+
     var dataSaved = false
     var pokedataSaved = false
     var typedataSaved = false
     var movedataSaved = false
+    val downloading = MutableLiveData(0)
+
     lateinit var sharedPreferences: SharedPreferences
     lateinit var pokeDB : RoomDB
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val decorView: View = window.decorView
+        // Hide the status bar.
+        window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+            WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        val binding = DataBindingUtil.setContentView<ActivityMainBinding>(this,R.layout.activity_main)
+        binding.downloader = this
+        binding.lifecycleOwner = this
+        // Loading Screen Wallpapers
+        val wallpapers = listOf<Int>((R.drawable.pikaball),
+            (R.drawable.articuno_wallpaper),
+            (R.drawable.ghost_pokemons_graveyard),
+            (R.drawable.mewball),
+            (R.drawable.moltres_wallpaper),
+            (R.drawable.evil_mewtwo),
+            (R.drawable.darkrai),
+            (R.drawable.lunar_wallpaper))
+
+        if(!pokedataSaved&&!typedataSaved&&!movedataSaved){
+            binding.progressDownload.max = APIs.LAST_POKEMON+APIs.LAST_TYPE+APIs.MOVE_LIMIT - 3
+        }else{
+            binding.progressDownload.max = APIs.LAST_POKEMON+APIs.LAST_TYPE+APIs.MOVE_LIMIT - 3
+        }
+//        binding = ActivityMainBinding.inflate(layoutInflater)
+//        setContentView(binding.root)
         sharedPreferences = getSharedPreferences("pokeDB", MODE_PRIVATE)
         Glide.with(this).load(R.drawable.pikantro).into(binding.IVPikaIntro)
         val queue = Volley.newRequestQueue(this)
@@ -61,8 +91,7 @@ class MainActivity : AppCompatActivity() {
         val movesQueue = Volley.newRequestQueue(this)
          pokeDB = RoomDB.getDatabase(this)
         val vm = ViewModelProvider(this).get(PokemonViewmodel::class.java)
-//        pokemonsList.add(Pokemons())                  // DEPRECATED
-//        pokeMoveData.add(MoveData(1,"scratch",100,100,25,"normal","special"))     //DEPRECATED
+
         pokedataSaved = sharedPreferences.getBoolean("have_pokedata",pokedataSaved)
         typedataSaved = sharedPreferences.getBoolean("have_typedata",typedataSaved)
         movedataSaved = sharedPreferences.getBoolean("have_movedata",movedataSaved)
@@ -118,6 +147,7 @@ class MainActivity : AppCompatActivity() {
                                             )
                                         )
                                     GlobalScope.launch { pokeDB.pkmnDao().storePokemon(pkmn) }
+                                    downloading.value = downloading.value?.plus(1)
 //                                    pokemonsList.add(pkmn)
                                     vm.addPkmn(pkmn)
                                 } else {
@@ -150,6 +180,7 @@ class MainActivity : AppCompatActivity() {
                                     )
                                     GlobalScope.launch { pokeDB.pkmnDao().storePokemon(pkmn) }
 //                                    pokemonsList.add(pkmn)
+                                    downloading.value = downloading.value?.plus(1)
                                     vm.addPkmn(pkmn)
                                 }
 
@@ -161,6 +192,7 @@ class MainActivity : AppCompatActivity() {
                     }
                     queue.add(reqPkms)
                 }
+
             }else{
                 pokedataSaved = true
                 sharedPreferences.edit().putBoolean("have_pokedata", pokedataSaved).apply()
@@ -210,6 +242,7 @@ class MainActivity : AppCompatActivity() {
                                 GlobalScope.launch {
                                     pokeDB.typeDao().storeType(type)
                                 }
+                                downloading.value = downloading.value?.plus(1)
                                 pokeTypeData.add(type)
                             },
                             Response.ErrorListener {
@@ -217,6 +250,7 @@ class MainActivity : AppCompatActivity() {
                             }) {}
                     typeQueue.add(reqTypes)
                 }
+
             }else{
                 typedataSaved = true
                 sharedPreferences.edit().putBoolean("have_typedata", typedataSaved).apply()
@@ -257,6 +291,7 @@ class MainActivity : AppCompatActivity() {
                                     GlobalScope.launch {
                                         pokeDB.moveDao().storeMove(move)
                                     }
+                                    downloading.value = downloading.value?.plus(1)
                                     pokeMoveData.add(move)
                                 } catch (e: Exception) {
                                     println("OCUURED : $e")
@@ -272,33 +307,64 @@ class MainActivity : AppCompatActivity() {
                 sharedPreferences.edit().putBoolean("have_movedata", movedataSaved).apply()
             }
         }
-        if(typedataSaved) {
-            pokeDB.typeDao().getAllTypes().observe(this, Observer {
-                pokeTypeData.addAll(it)
-            })
-        }
-        if(pokedataSaved) {
-            // GETTING DATA FROM LOCAL DATABASE(ROOM)
-            pokeDB.pkmnDao().getAllPokemon().observe(this, Observer {
+       lifecycleScope.launch{
+           if(pokeDB.typeDao().isUpToDate() >= APIs.LAST_TYPE - 1) {
+               pokeDB.typeDao().getAllTypes().observe(this@MainActivity, Observer {
+                   pokeTypeData.addAll(it)
+                   downloading.value = downloading.value?.plus(it.size)
+               })
+           }
+           if(pokeDB.pkmnDao().isUpToDate() >= APIs.LAST_POKEMON - 1) {
+               // GETTING DATA FROM LOCAL DATABASE(ROOM)
+               pokeDB.pkmnDao().getAllPokemon().observe(this@MainActivity, Observer {
 //                pokemonsList.addAll(it)
-                vm.addallPkmn(it)
-            })
+                   vm.addallPkmn(it)
+                   downloading.value = downloading.value?.plus(it.size)
+               })
+           }
+           if( pokeDB.moveDao().isUpToDate() >= APIs.MOVE_LIMIT - 1) {
+               pokeDB.moveDao().getAllMoves().observe(this@MainActivity, Observer {
+                   pokeMoveData.addAll(it)
+                   downloading.value = downloading.value?.plus(it.size)
+               })
+           }
+       }
+        var job : Job? = null
+        downloading.observe(this, Observer {    progress->
+            var loaded = true
+            if(progress>=binding.progressDownload.max){
+                Handler().postDelayed({
+                    job?.cancel(null)
+                    binding.IVPikaIntro.visibility = GONE
+                    binding.tvLoadingData.visibility = GONE
+                    binding.progressDownload.visibility = GONE
+                    supportFragmentManager.beginTransaction().replace(R.id.pokeList_container, DashboardFragment()).commit()
+                    binding.pokeListContainer.background = null
+                    window.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
+                },3000)
+            }
+        })
+        job = lifecycleScope.launch {
+            var i = 0
+            binding.pokeListContainer.setBackgroundResource(wallpapers[i])
+            delay(2500)
+            while(job?.isActive == true){
+                try{
+                    withContext(Main){
+                        binding.pokeListContainer.visibility = GONE
+                    }
+                    delay(250)
+                    withContext(Main){
+                        binding.pokeListContainer.setBackgroundResource(wallpapers[++i])
+                             binding.pokeListContainer.visibility = VISIBLE
+                    }
+                    delay(5000)
+                }catch (e : Exception){
+                    i = -1
+                    binding.pokeListContainer.setBackgroundResource(wallpapers[++i])
+                }
+            }
         }
-        if(movedataSaved) {
-            pokeDB.moveDao().getAllMoves().observe(this, Observer {
-                pokeMoveData.addAll(it)
-            })
-        }
-
-        Handler().postDelayed({
-
-            binding.IVPikaIntro.visibility = GONE
-            binding.pokeListContainer.background = null
-//            pokemonsList.removeFirst()            // DEPRECATED
-            supportFragmentManager.beginTransaction().replace(R.id.pokeList_container, DashboardFragment()).commit()
-        },3500)
-
-
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
