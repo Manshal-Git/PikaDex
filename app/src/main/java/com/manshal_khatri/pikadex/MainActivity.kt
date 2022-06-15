@@ -59,11 +59,12 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val decorView: View = window.decorView
+
         // Hide the status bar.
         window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
             WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
+        // data binding setup for loading screen
         val binding = DataBindingUtil.setContentView<ActivityMainBinding>(this,R.layout.activity_main)
         binding.downloader = this
         binding.lifecycleOwner = this
@@ -77,29 +78,29 @@ class MainActivity : AppCompatActivity() {
             (R.drawable.darkrai),
             (R.drawable.lunar_wallpaper))
 
+        // Setup Data Loading Progressbar
         if(!pokedataSaved&&!typedataSaved&&!movedataSaved){
             binding.progressDownload.max = APIs.LAST_POKEMON+APIs.LAST_TYPE+APIs.MOVE_LIMIT - 3
         }else{
             binding.progressDownload.max = APIs.LAST_POKEMON+APIs.LAST_TYPE+APIs.MOVE_LIMIT - 3
         }
-//        binding = ActivityMainBinding.inflate(layoutInflater)
-//        setContentView(binding.root)
+
         sharedPreferences = getSharedPreferences("pokeDB", MODE_PRIVATE)
-        Glide.with(this).load(R.drawable.pikantro).into(binding.IVPikaIntro)
+        pokedataSaved = sharedPreferences.getBoolean("have_pokedata",pokedataSaved)
+        typedataSaved = sharedPreferences.getBoolean("have_typedata",typedataSaved)
+        movedataSaved = sharedPreferences.getBoolean("have_movedata",movedataSaved)
+        // Data Fetching Volley Setup
         val queue = Volley.newRequestQueue(this)
         val typeQueue = Volley.newRequestQueue(this)
         val movesQueue = Volley.newRequestQueue(this)
          pokeDB = RoomDB.getDatabase(this)
         val vm = ViewModelProvider(this).get(PokemonViewmodel::class.java)
-
-        pokedataSaved = sharedPreferences.getBoolean("have_pokedata",pokedataSaved)
-        typedataSaved = sharedPreferences.getBoolean("have_typedata",typedataSaved)
-        movedataSaved = sharedPreferences.getBoolean("have_movedata",movedataSaved)
         vm.clearAllPkmn()
         pokeMoveData.clear()  // Not efficient Should be using viewmodel
         pokeTypeData.clear()
 //        gd = GestureDetector(this,this)
 
+        // API Calling and Storing in Room DB
         GlobalScope.launch {
             if (pokeDB.pkmnDao().isUpToDate() < APIs.LAST_POKEMON - 1) {
                 for (i in start until APIs.LAST_POKEMON) {
@@ -307,6 +308,7 @@ class MainActivity : AppCompatActivity() {
                 sharedPreferences.edit().putBoolean("have_movedata", movedataSaved).apply()
             }
         }
+        // Getting Data from Room DB Offline
        lifecycleScope.launch{
            if(pokeDB.typeDao().isUpToDate() >= APIs.LAST_TYPE - 1) {
                pokeDB.typeDao().getAllTypes().observe(this@MainActivity, Observer {
@@ -329,21 +331,23 @@ class MainActivity : AppCompatActivity() {
                })
            }
        }
+
         var job : Job? = null
+        // Load Dashboard Fragment When Have All Data
         downloading.observe(this, Observer {    progress->
-            var loaded = true
             if(progress>=binding.progressDownload.max){
                 Handler().postDelayed({
                     job?.cancel(null)
-                    binding.IVPikaIntro.visibility = GONE
+                    window.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
                     binding.tvLoadingData.visibility = GONE
                     binding.progressDownload.visibility = GONE
                     supportFragmentManager.beginTransaction().replace(R.id.pokeList_container, DashboardFragment()).commit()
                     binding.pokeListContainer.background = null
-                    window.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
                 },3000)
             }
         })
+
+        // Slideshow at Loading Screen
         job = lifecycleScope.launch {
             var i = 0
             binding.pokeListContainer.setBackgroundResource(wallpapers[i])

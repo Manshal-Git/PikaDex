@@ -26,16 +26,6 @@
             android:background="@drawable/into_back"
             >
 
-            <ImageView
-                android:id="@+id/IVPikaIntro"
-                android:layout_width="match_parent"
-                android:layout_height="442dp"
-                android:layout_marginBottom="42dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                android:layout_gravity="bottom"
-                android:visibility="gone"/>
-
            <FrameLayout
                android:layout_width="match_parent"
                android:layout_height="wrap_content"
