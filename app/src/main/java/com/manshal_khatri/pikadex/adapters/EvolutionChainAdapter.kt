@@ -23,7 +23,8 @@ class EvolutionChainAdapter (val list: List<String>,val activity: FragmentActivi
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         var pkmn = list[position]
         println("curPokemon is $pkmn")
-        pkmn = pkmn.toString().substringBefore("-")
+//        pkmn = pkmn.toString().substringBefore("-")
+
         val pokemon = pokemonsList.find { pkmn == it.pokeName }
         if (pokemon != null) {
 //            Picasso.get().load(pokemon.spriteUrl)into(holder.sprite)
