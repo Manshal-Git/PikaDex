@@ -10,10 +10,10 @@
         >
        <KeyFrameSet>
        </KeyFrameSet>
-        <OnSwipe motion:touchAnchorId="@id/pokeName" />
-        <OnSwipe
-            motion:touchAnchorId="@+id/bottomNavigationView"
-            motion:touchAnchorSide="bottom" />
+        <OnSwipe motion:touchAnchorId="@id/pokeName"
+            motion:onTouchUp="stop"
+            />
+
 
 
     </Transition>

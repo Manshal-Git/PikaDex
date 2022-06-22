@@ -26,10 +26,9 @@ class EvolutionChainAdapter (val list: List<String>,val activity: FragmentActivi
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         var pkmn = list[position]
-        val pkmn2 = pkmn.toString().substringBefore("-")
 //        println("$pkmn $pkmn2")
         val pokemon = pokemonsList.find { pkmn == it.pokeName }
-        val pokemonFormed =  pokemonsList.find { pkmn2 == it.pokeName.substringBefore("-") }
+        val pokemonFormed =  pokemonsList.find { pkmn == it.pokeName.substringBefore("-") }
 //        println("$pokemon $pokemonFormed")
         with(holder) {
             if (pokemon != null) {
