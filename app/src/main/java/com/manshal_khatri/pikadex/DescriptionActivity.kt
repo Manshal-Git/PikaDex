@@ -140,9 +140,9 @@ class DescriptionActivity : AppCompatActivity() {
         binding.bottomNavigationView.getTabAt(2)?.setIcon(R.drawable.ic_location)
     }
     private fun getMoves(queue : RequestQueue, pokeId : Int){
+        pokeMoves.clear()
         val request = object : JsonObjectRequest(Method.GET, APIs.PKMN_API+"$pokeId",null,Response.Listener {
             print("Api Response success $it")
-             pokeMoves.clear()
             // Getting moves
             val moveslist = it.getJSONArray("moves")
             for( i in 0 until moveslist.length()){

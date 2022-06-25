@@ -54,7 +54,7 @@ class DashboardFragment : Fragment() {
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 if(newText!=""){
-                    list.adapter= PkmnRVAdapter(pokemonsList.filter { it.pokeName.contains(newText!!) },view)
+                    list.adapter= PkmnRVAdapter(pokemonsList.filter { it.pokeName.contains(newText!!.lowercase())},view)
                 }else{
                     list.adapter= PkmnRVAdapter(pokemonsList.sortedBy { it.id },view)
                 }
