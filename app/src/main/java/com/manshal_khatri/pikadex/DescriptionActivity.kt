@@ -18,6 +18,7 @@ import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.manshal_khatri.pikadex.adapters.DescriptionViewPager
 import com.manshal_khatri.pikadex.adapters.MyTreeAdapter
 import com.manshal_khatri.pikadex.adapters.TreeViewHolder
 import com.manshal_khatri.pikadex.databinding.ActivityDescriptionBinding
@@ -37,7 +38,7 @@ import org.json.JSONArray
 
 var pokemon : Pokemons? = Pokemons() // CURRENT PKMN OBJ CAN BE USED IN CHILD FRAGMENTS
 val evolutionChain  = mutableListOf<String>()
-var chainDataSaved = false
+
 class DescriptionActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDescriptionBinding
     private  lateinit var mBinding: ConstraintSet
@@ -114,24 +115,29 @@ class DescriptionActivity : AppCompatActivity() {
                 }
             }
         }
-        binding.bottomNavigationView.setOnNavigationItemSelectedListener {
-            when(it.itemId){
-                R.id.action_moves -> {
-                    supportFragmentManager.beginTransaction().replace(R.id.desc_frag_container,MovesFragment()).commitNow()
-                    return@setOnNavigationItemSelectedListener  true
-                }
-                R.id.action_stats -> {
-                    supportFragmentManager.beginTransaction().replace(R.id.desc_frag_container,GenericInfoFragment()).commitNow()
-                    return@setOnNavigationItemSelectedListener  true
-                }
-                else -> {
-                    supportFragmentManager.beginTransaction().replace(R.id.desc_frag_container,LocationFragment()).commitNow()
-                    return@setOnNavigationItemSelectedListener  true
-                }
-            }
-        }
+//        binding.bottomNavigationView.setOnNavigationItemSelectedListener {
+//            when(it.itemId){
+//                R.id.action_moves -> {
+//                    supportFragmentManager.beginTransaction().replace(R.id.desc_frag_container,MovesFragment()).commitNow()
+//                    return@setOnNavigationItemSelectedListener  true
+//                }
+//                R.id.action_stats -> {
+//                    supportFragmentManager.beginTransaction().replace(R.id.desc_frag_container,GenericInfoFragment()).commitNow()
+//                    return@setOnNavigationItemSelectedListener  true
+//                }
+//                else -> {
+//                    supportFragmentManager.beginTransaction().replace(R.id.desc_frag_container,LocationFragment()).commitNow()
+//                    return@setOnNavigationItemSelectedListener  true
+//                }
+//            }
+//        }
 
-        supportFragmentManager.beginTransaction().add(R.id.desc_frag_container,GenericInfoFragment()).commit()
+//        supportFragmentManager.beginTransaction().add(R.id.desc_frag_container,GenericInfoFragment()).commit()
+        binding.descFragContainer.adapter = DescriptionViewPager(this,supportFragmentManager)
+        binding.bottomNavigationView.setupWithViewPager(binding.descFragContainer)
+        binding.bottomNavigationView.getTabAt(0)?.setIcon(R.drawable.ic_details)
+        binding.bottomNavigationView.getTabAt(1)?.setIcon(R.drawable.ic_moves)
+        binding.bottomNavigationView.getTabAt(2)?.setIcon(R.drawable.ic_location)
     }
     private fun getMoves(queue : RequestQueue, pokeId : Int){
         val request = object : JsonObjectRequest(Method.GET, APIs.PKMN_API+"$pokeId",null,Response.Listener {

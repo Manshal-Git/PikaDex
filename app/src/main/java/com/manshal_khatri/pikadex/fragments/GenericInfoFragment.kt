@@ -12,7 +12,6 @@ import com.android.volley.RequestQueue
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.manshal_khatri.pikadex.R
-import com.manshal_khatri.pikadex.chainDataSaved
 import com.manshal_khatri.pikadex.model.EvolutionChainObj
 import com.manshal_khatri.pikadex.room.RoomDB
 import com.manshal_khatri.pikadex.util.APIs
